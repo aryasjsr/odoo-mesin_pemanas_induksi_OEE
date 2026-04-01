@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quality_check_form" model="ir.ui.view">
+        <field name="name">quality.check.form</field>
+        <field name="model">quality.check</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_pass" string="Pass" type="object"
+                            class="btn-success" invisible="state != 'todo'"/>
+                    <button name="action_fail" string="Fail" type="object"
+                            class="btn-danger" invisible="state != 'todo'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Details">
+                            <field name="name"/>
+                            <field name="control_point_id"/>
+                            <field name="check_type"/>
+                            <field name="workorder_id"/>
+                            <field name="product_id"/>
+                            <field name="workcenter_id"/>
+                        </group>
+                        <group string="Result">
+                            <field name="result_passfail" invisible="check_type != 'passfail'"/>
+                            <field name="measure_value" invisible="check_type != 'measure'"/>
+                            <field name="measure_min" invisible="check_type != 'measure'"/>
+                            <field name="measure_max" invisible="check_type != 'measure'"/>
+                            <field name="measure_uom" invisible="check_type != 'measure'"/>
+                            <field name="picture" widget="image" invisible="check_type != 'picture'"/>
+                            <field name="alert_id"/>
+                        </group>
+                    </group>
+                    <group string="Instructions">
+                        <field name="instructions" readonly="1" nolabel="1"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="quality_check_list" model="ir.ui.view">
+        <field name="name">quality.check.list</field>
+        <field name="model">quality.check</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'pass'" decoration-danger="state == 'fail'">
+                <field name="name"/>
+                <field name="control_point_id"/>
+                <field name="check_type"/>
+                <field name="product_id"/>
+                <field name="workcenter_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_quality_check" model="ir.actions.act_window">
+        <field name="name">Quality Checks</field>
+        <field name="res_model">quality.check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

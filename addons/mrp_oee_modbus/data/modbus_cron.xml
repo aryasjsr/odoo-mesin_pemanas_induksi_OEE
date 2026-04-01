@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Scheduled Action: Poll all active Modbus configs.
+        Runs every 1 minute (Odoo cron minimum).
+        The actual polling thread runs every config.polling_interval seconds.
+        For one-off syncs without threading, this cron directly calls
+        action_sync_oee_from_modbus on each active workcenter.
+    -->
+    <record id="ir_cron_modbus_poll" model="ir.cron">
+        <field name="name">Modbus OEE — Poll Active Configurations</field>
+        <field name="model_id" ref="model_mrp_modbus_config"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_poll_all_active_configs()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+</odoo>

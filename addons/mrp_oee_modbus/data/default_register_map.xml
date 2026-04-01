@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Default Modbus Register Map Template for Omron NB HMI
+        (scale_factor 0.01 for OEE outputs: Odoo writes 8550 → HMI shows 85.50%)
+
+        This is a standalone template config. Users should create their own config
+        and can use this as reference, or duplicate entries into their config.
+    -->
+    <record id="default_modbus_config_template" model="mrp.modbus.config">
+        <field name="name">Default Omron NB HMI Template</field>
+        <field name="host">192.168.1.1</field>
+        <field name="port">502</field>
+        <field name="slave_id">1</field>
+        <field name="timeout">3.0</field>
+        <field name="retries">3</field>
+        <field name="reconnect_delay">0.1</field>
+        <field name="polling_interval">5</field>
+        <field name="is_active">False</field>
+        <field name="notes">Default register map template for Omron NB HMI.
+Copy this config and link it to your Work Center. Update the host IP before activating.</field>
+    </record>
+
+    <!-- Register entries for the default template -->
+    <record id="reg_planned_time" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Planned Time</field>
+        <field name="variable_key">planned_time</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">0</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Total planned production time in minutes (register 40001)</field>
+    </record>
+
+    <record id="reg_run_time" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Run Time</field>
+        <field name="variable_key">run_time</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">1</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Actual machine run time in minutes (register 40002)</field>
+    </record>
+
+    <record id="reg_downtime" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Downtime</field>
+        <field name="variable_key">downtime</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">2</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Machine downtime in minutes (register 40003)</field>
+    </record>
+
+    <record id="reg_produced_qty" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Produced Quantity</field>
+        <field name="variable_key">produced_qty</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">3</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Actual units produced (good count) (register 40004)</field>
+    </record>
+
+    <record id="reg_ideal_qty" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Ideal Quantity</field>
+        <field name="variable_key">ideal_qty</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">4</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Ideal/target production quantity (register 40005)</field>
+    </record>
+
+    <record id="reg_defect_qty" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Defect Quantity</field>
+        <field name="variable_key">defect_qty</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">5</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Rejected/defective units count (register 40006)</field>
+    </record>
+
+    <record id="reg_machine_status" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">Machine Status</field>
+        <field name="variable_key">machine_status</field>
+        <field name="register_type">coil</field>
+        <field name="register_address">0</field>
+        <field name="data_type">bool</field>
+        <field name="scale_factor">1.0</field>
+        <field name="direction">read</field>
+        <field name="description">Machine ON/OFF status coil</field>
+    </record>
+
+    <record id="reg_oee_availability" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">OEE Availability</field>
+        <field name="variable_key">oee_availability</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">10</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">0.01</field>
+        <field name="direction">write</field>
+        <field name="description">Availability % × 100 written to HMI (register 40011). e.g. 8550 = 85.50%</field>
+    </record>
+
+    <record id="reg_oee_performance" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">OEE Performance</field>
+        <field name="variable_key">oee_performance</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">11</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">0.01</field>
+        <field name="direction">write</field>
+        <field name="description">Performance % × 100 written to HMI (register 40012)</field>
+    </record>
+
+    <record id="reg_oee_quality" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">OEE Quality</field>
+        <field name="variable_key">oee_quality</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">12</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">0.01</field>
+        <field name="direction">write</field>
+        <field name="description">Quality % × 100 written to HMI (register 40013)</field>
+    </record>
+
+    <record id="reg_oee_overall" model="mrp.modbus.register.map">
+        <field name="config_id" ref="default_modbus_config_template"/>
+        <field name="name">OEE Overall</field>
+        <field name="variable_key">oee_overall</field>
+        <field name="register_type">holding</field>
+        <field name="register_address">13</field>
+        <field name="data_type">uint16</field>
+        <field name="scale_factor">0.01</field>
+        <field name="direction">write</field>
+        <field name="description">Total OEE % × 100 written to HMI (register 40014)</field>
+    </record>
+</odoo>

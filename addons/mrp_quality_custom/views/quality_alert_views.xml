@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quality_alert_kanban" model="ir.ui.view">
+        <field name="name">quality.alert.kanban</field>
+        <field name="model">quality.alert</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="priority"/>
+                <field name="assigned_to"/>
+                <templates>
+                    <t t-name="card">
+                        <field name="priority" widget="priority"/>
+                        <field name="name" class="fw-bold"/>
+                        <field name="product_id"/>
+                        <field name="assigned_to" widget="many2one_avatar_user"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="quality_alert_form" model="ir.ui.view">
+        <field name="name">quality.alert.form</field>
+        <field name="model">quality.alert</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="check_id"/>
+                            <field name="product_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="stage_id"/>
+                            <field name="priority"/>
+                            <field name="assigned_to"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Root Cause Analysis">
+                            <field name="root_cause"/>
+                        </page>
+                        <page string="Corrective Action">
+                            <field name="corrective_action"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quality_alert" model="ir.actions.act_window">
+        <field name="name">Quality Alerts</field>
+        <field name="res_model">quality.alert</field>
+        <field name="view_mode">kanban,form</field>
+    </record>
+</odoo>

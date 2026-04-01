@@ -1,0 +1,91 @@
+// ===========================================================================
+// Brand Login — Styles for /web/login & /web/signup pages
+// Matches brandGuidelines.md — Primary Blue + Accent Blue
+// ===========================================================================
+
+// Login page body
+.oe_login_form,
+body.oe_login,
+body.o_frontend,
+.oe_website_login_container {
+    font-family: 'Inter', 'Roboto', -apple-system, sans-serif !important;
+}
+
+// Login background
+body.oe_login {
+    background: linear-gradient(145deg, #0F172A 0%, #1E3A8A 50%, #1E40AF 100%) !important;
+}
+
+// Login card
+.oe_login_form,
+.card.oe_login_form {
+    background: #FFFFFF !important;
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+    padding: 36px !important;
+}
+
+// Login heading
+.oe_login_form h1,
+.oe_login_form .oe_login_header {
+    color: #1E3A8A !important;
+    font-weight: 700 !important;
+}
+
+// Login labels
+.oe_login_form label {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
+
+// Login inputs
+.oe_login_form input.form-control {
+    border-radius: 8px !important;
+    border: 1px solid #D1D5DB !important;
+    padding: 10px 14px !important;
+    color: #111827 !important;
+    background: #F9FAFB !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+.oe_login_form input.form-control:focus {
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    background: #FFFFFF !important;
+}
+
+// Login button
+.oe_login_form .btn-primary {
+    background: linear-gradient(135deg, #1E3A8A, #3B82F6) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.02em !important;
+    transition: all 0.3s ease !important;
+}
+
+.oe_login_form .btn-primary:hover {
+    background: linear-gradient(135deg, #162E69, #2563EB) !important;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+// Links on the login page
+.oe_login_form a {
+    color: #3B82F6 !important;
+}
+
+.oe_login_form a:hover {
+    color: #1E3A8A !important;
+}
+
+// Error messages on login
+.oe_login_form .alert-danger {
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    color: #991B1B !important;
+    border-radius: 8px !important;
+}

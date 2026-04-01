@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Work Order Form View with Machine State Fields -->
+    <record id="mrp_workorder_view_form_inherit_shopfloor" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.inherit.shopfloor</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <field name="machine_state" widget="statusbar"
+                           statusbar_visible="stop,running,paused"/>
+                </header>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group string="Machine Integration (HMI)" name="machine_hmi_group">
+                    <group>
+                        <field name="machine_state" readonly="1"/>
+                        <field name="reason_code" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="good_count" readonly="1"/>
+                        <field name="reject_count" readonly="1"/>
+                        <field name="total_count" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

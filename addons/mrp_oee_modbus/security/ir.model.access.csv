@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_modbus_config,mrp.modbus.config,model_mrp_modbus_config,base.group_user,1,1,1,1
+access_mrp_modbus_register_map,mrp.modbus.register.map,model_mrp_modbus_register_map,base.group_user,1,1,1,1
+access_mrp_modbus_test_wizard,mrp.modbus.test.wizard,model_mrp_modbus_test_wizard,base.group_user,1,1,1,1
+access_mrp_modbus_log,mrp.modbus.log,model_mrp_modbus_log,base.group_user,1,1,1,1

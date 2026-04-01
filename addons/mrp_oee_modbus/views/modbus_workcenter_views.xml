@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend mrp.workcenter form to add Modbus config field + Sync button -->
+    <record id="mrp_workcenter_modbus_form" model="ir.ui.view">
+        <field name="name">mrp.workcenter.modbus.form</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <!-- Add Modbus button before sheet in a header -->
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_sync_oee_from_modbus"
+                            string="📡 Sync OEE from Modbus"
+                            type="object"
+                            class="btn-primary"
+                            invisible="not modbus_config_id"/>
+                </header>
+            </xpath>
+            <!-- Add Modbus config field to the form -->
+            <xpath expr="//sheet//group[1]" position="after">
+                <group string="Modbus Integration">
+                    <field name="modbus_config_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

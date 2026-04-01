@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mrp_quality_custom.ScrapToast">
+        <div class="scrap-toast-container">
+            <t t-foreach="state.toasts" t-as="toast" t-key="toast.id">
+                <div class="scrap-toast" t-on-click="() => this.dismissToast(toast.id)">
+                    <div class="scrap-toast-icon">
+                        <i class="fa fa-exclamation-circle"/>
+                    </div>
+                    <div class="scrap-toast-content">
+                        <strong t-esc="toast.title"/>
+                        <span t-esc="toast.message"/>
+                    </div>
+                    <button class="scrap-toast-close">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

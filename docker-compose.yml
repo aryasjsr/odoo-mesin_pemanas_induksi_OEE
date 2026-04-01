@@ -1,0 +1,26 @@
+services:
+  web:
+    image: odoo:18.0
+    command: odoo --dev=all
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Mengarahkan data web ke drive D
+      - "D:/ARYA/SEMESTER 8/ENTERPRISE AUTOMATION/Odoo/odoo-data:/var/lib/odoo"
+      - "D:/ARYA/SEMESTER 8/ENTERPRISE AUTOMATION/Odoo/addons:/mnt/extra-addons"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - "D:/ARYA/SEMESTER 8/ENTERPRISE AUTOMATION/Odoo/db-data:/var/lib/postgresql/data"

@@ -1,0 +1,45 @@
+[options]
+# PostgreSQL Configuration
+db_host = db
+db_port = 5432
+db_user = odoo
+db_password = odoo
+db_name = odoo
+db_template = template0
+
+# Addons Path
+addons_path = /mnt/extra-addons,/app/addons
+
+# Server Configuration
+xmlrpc_port = 8069
+longpolling_port = 8072
+
+# Proxy Headers
+proxy_mode = True
+
+# Directory Configuration
+data_dir = /var/lib/odoo
+
+# Development Mode
+dev_mode = all,reload,qweb
+
+# Logging
+log_level = debug
+log_db = False
+
+# Security
+secure_cookie = False
+
+# Limits
+limit_request = 8192
+limit_memory_soft = 2684354560
+limit_memory_hard = 3221225472
+
+# Session Configuration
+session_store = 1
+session_backend = redis
+
+# Custom Modules Configuration
+# Uncomment and configure as needed
+# auto_reload = True
+# workers = 4

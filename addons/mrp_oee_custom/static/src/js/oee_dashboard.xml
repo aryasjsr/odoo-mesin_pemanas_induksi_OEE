@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mrp_oee_custom.OeeDashboard">
+        <div class="oee-dashboard">
+            <!-- Header -->
+            <div class="oee-header">
+                <div class="oee-header-content">
+                    <h1>OEE Dashboard</h1>
+                    <p class="oee-subtitle">Overall Equipment Effectiveness — Real-time Monitoring</p>
+                </div>
+                <div class="oee-header-status">
+                    <span t-if="state.lastUpdate" class="oee-last-update">
+                        <i class="fa fa-refresh"/> Last update: <t t-esc="state.lastUpdate"/>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="oee-loading">
+                <div class="oee-spinner"/>
+                <p>Loading OEE data...</p>
+            </div>
+
+            <!-- Error State -->
+            <div t-if="state.error" class="oee-error">
+                <i class="fa fa-exclamation-triangle"/>
+                <span t-esc="state.error"/>
+            </div>
+
+            <!-- Workcenter Cards -->
+            <t t-if="!state.loading">
+                <div t-if="state.workcenters.length === 0" class="oee-empty">
+                    <i class="fa fa-industry"/>
+                    <p>No workcenters found. Please configure workcenters in Manufacturing settings.</p>
+                </div>
+
+                <t t-foreach="state.workcenters" t-as="wc" t-key="wc.id">
+                    <div class="oee-workcenter-section">
+                        <!-- Workcenter Title Bar -->
+                        <div class="oee-wc-header">
+                            <div class="oee-wc-title">
+                                <i class="fa fa-industry"/>
+                                <h2 t-esc="wc.name"/>
+                            </div>
+                            <div class="oee-wc-meta">
+                                <span t-attf-class="oee-state-badge {{ getStateClass(wc.machine_state) }}">
+                                    <t t-esc="getStateLabel(wc.machine_state)"/>
+                                </span>
+                                <span class="oee-active-wo">
+                                    <i class="fa fa-clipboard"/> WO: <t t-esc="wc.active_wo"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- 4 OEE Gauge Cards -->
+                        <div class="oee-gauges-row">
+                            <!-- Availability -->
+                            <div class="oee-gauge-card">
+                                <div class="oee-gauge-label">Availability</div>
+                                <div class="oee-gauge-svg-container">
+                                    <svg class="oee-gauge-svg" viewBox="0 0 120 120">
+                                        <circle class="oee-gauge-bg" cx="60" cy="60" r="54"/>
+                                        <circle t-attf-class="oee-gauge-progress {{ getStatusColor(wc.availability) }}"
+                                                cx="60" cy="60" r="54"
+                                                t-att-stroke-dashoffset="getCircleOffset(wc.availability)"/>
+                                    </svg>
+                                    <div t-attf-class="oee-gauge-value {{ getStatusColor(wc.availability) }}">
+                                        <span t-esc="wc.availability.toFixed(1)"/>
+                                        <small>%</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Performance -->
+                            <div class="oee-gauge-card">
+                                <div class="oee-gauge-label">Performance</div>
+                                <div class="oee-gauge-svg-container">
+                                    <svg class="oee-gauge-svg" viewBox="0 0 120 120">
+                                        <circle class="oee-gauge-bg" cx="60" cy="60" r="54"/>
+                                        <circle t-attf-class="oee-gauge-progress {{ getStatusColor(wc.performance) }}"
+                                                cx="60" cy="60" r="54"
+                                                t-att-stroke-dashoffset="getCircleOffset(wc.performance)"/>
+                                    </svg>
+                                    <div t-attf-class="oee-gauge-value {{ getStatusColor(wc.performance) }}">
+                                        <span t-esc="wc.performance.toFixed(1)"/>
+                                        <small>%</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quality -->
+                            <div class="oee-gauge-card">
+                                <div class="oee-gauge-label">Quality</div>
+                                <div class="oee-gauge-svg-container">
+                                    <svg class="oee-gauge-svg" viewBox="0 0 120 120">
+                                        <circle class="oee-gauge-bg" cx="60" cy="60" r="54"/>
+                                        <circle t-attf-class="oee-gauge-progress {{ getStatusColor(wc.quality) }}"
+                                                cx="60" cy="60" r="54"
+                                                t-att-stroke-dashoffset="getCircleOffset(wc.quality)"/>
+                                    </svg>
+                                    <div t-attf-class="oee-gauge-value {{ getStatusColor(wc.quality) }}">
+                                        <span t-esc="wc.quality.toFixed(1)"/>
+                                        <small>%</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total OEE -->
+                            <div class="oee-gauge-card oee-gauge-card-main">
+                                <div class="oee-gauge-label">Total OEE</div>
+                                <div class="oee-gauge-svg-container oee-gauge-svg-main">
+                                    <svg class="oee-gauge-svg" viewBox="0 0 120 120">
+                                        <circle class="oee-gauge-bg" cx="60" cy="60" r="54"/>
+                                        <circle t-attf-class="oee-gauge-progress {{ getStatusColor(wc.oee) }}"
+                                                cx="60" cy="60" r="54"
+                                                t-att-stroke-dashoffset="getCircleOffset(wc.oee)"/>
+                                    </svg>
+                                    <div t-attf-class="oee-gauge-value {{ getStatusColor(wc.oee) }}">
+                                        <span t-esc="wc.oee.toFixed(1)"/>
+                                        <small>%</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time Breakdown -->
+                        <div class="oee-time-row">
+                            <div class="oee-time-card">
+                                <span class="oee-time-label">Planned</span>
+                                <span class="oee-time-value"><t t-esc="wc.planned_minutes.toFixed(2)"/> min</span>
+                            </div>
+                            <div class="oee-time-card oee-time-operating">
+                                <span class="oee-time-label">Operating</span>
+                                <span class="oee-time-value"><t t-esc="wc.operating_minutes.toFixed(2)"/> min</span>
+                            </div>
+                            <div class="oee-time-card oee-time-blocked">
+                                <span class="oee-time-label">Blocked / Loss</span>
+                                <span class="oee-time-value"><t t-esc="wc.blocked_minutes.toFixed(2)"/> min</span>
+                            </div>
+                        </div>
+
+                        <!-- Production Counts -->
+                        <div class="oee-counts-row">
+                            <div class="oee-count-card">
+                                <i class="fa fa-check-circle oee-count-icon oee-good"/>
+                                <div class="oee-count-info">
+                                    <span class="oee-count-number" t-esc="wc.good_count"/>
+                                    <span class="oee-count-label">Good</span>
+                                </div>
+                            </div>
+                            <div class="oee-count-card">
+                                <i class="fa fa-times-circle oee-count-icon oee-critical"/>
+                                <div class="oee-count-info">
+                                    <span class="oee-count-number" t-esc="wc.reject_count"/>
+                                    <span class="oee-count-label">Reject</span>
+                                </div>
+                            </div>
+                            <div class="oee-count-card">
+                                <i class="fa fa-cubes oee-count-icon oee-primary"/>
+                                <div class="oee-count-info">
+                                    <span class="oee-count-number" t-esc="wc.total_count"/>
+                                    <span class="oee-count-label">Total</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+</templates>

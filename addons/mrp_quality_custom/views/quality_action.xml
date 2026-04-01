@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client Action: Quality Dashboard -->
+    <record id="action_quality_dashboard" model="ir.actions.client">
+        <field name="name">Quality Dashboard</field>
+        <field name="tag">quality_dashboard</field>
+        <field name="target">main</field>
+    </record>
+
+    <!-- Top-level Menu under Manufacturing -->
+    <menuitem id="menu_quality_root"
+              name="Quality"
+              parent="mrp.menu_mrp_root"
+              sequence="90"/>
+
+    <menuitem id="menu_quality_dashboard"
+              name="Dashboard"
+              parent="menu_quality_root"
+              action="action_quality_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_quality_control_points"
+              name="Control Points"
+              parent="menu_quality_root"
+              action="action_quality_control_point"
+              sequence="20"/>
+
+    <menuitem id="menu_quality_checks"
+              name="Quality Checks"
+              parent="menu_quality_root"
+              action="action_quality_check"
+              sequence="30"/>
+
+    <menuitem id="menu_quality_alerts"
+              name="Quality Alerts"
+              parent="menu_quality_root"
+              action="action_quality_alert"
+              sequence="40"/>
+</odoo>

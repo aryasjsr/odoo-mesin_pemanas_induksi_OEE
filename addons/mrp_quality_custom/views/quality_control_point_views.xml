@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quality_control_point_form" model="ir.ui.view">
+        <field name="name">quality.control.point.form</field>
+        <field name="model">quality.control.point</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Control Point">
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="operation_id"/>
+                            <field name="trigger"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Check Configuration">
+                            <field name="check_type"/>
+                            <field name="measure_min" invisible="check_type != 'measure'"/>
+                            <field name="measure_max" invisible="check_type != 'measure'"/>
+                            <field name="measure_uom" invisible="check_type != 'measure'"/>
+                        </group>
+                    </group>
+                    <group string="Instructions">
+                        <field name="instructions" nolabel="1"
+                               placeholder="Tuliskan instruksi kerja detail untuk operator, contoh: 'Periksa suhu coil induksi pada range 150-200°C menggunakan thermogun'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="quality_control_point_list" model="ir.ui.view">
+        <field name="name">quality.control.point.list</field>
+        <field name="model">quality.control.point</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="workcenter_id"/>
+                <field name="operation_id" optional="show"/>
+                <field name="trigger"/>
+                <field name="check_type"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_quality_control_point" model="ir.actions.act_window">
+        <field name="name">Control Points</field>
+        <field name="res_model">quality.control.point</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

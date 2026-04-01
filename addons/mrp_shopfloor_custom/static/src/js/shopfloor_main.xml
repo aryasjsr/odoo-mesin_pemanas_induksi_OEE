@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mrp_shopfloor_custom.ShopFloor">
+        <div class="sf-root">
+            <!-- ===== TOP NAV: Work Center Tabs ===== -->
+            <div class="sf-topbar">
+                <div class="sf-topbar-brand">
+                    <i class="fa fa-industry"/> Shop Floor
+                </div>
+                <div class="sf-tabs">
+                    <t t-foreach="state.workcenters" t-as="wc" t-key="wc.id">
+                        <button t-attf-class="sf-tab {{ isSelectedWc(wc.id) ? 'sf-tab-active' : '' }}"
+                                t-on-click="() => this.selectWorkcenter(wc.id)">
+                            <t t-esc="wc.name"/>
+                        </button>
+                    </t>
+                </div>
+            </div>
+
+            <div class="sf-body">
+                <!-- ===== LEFT PANEL: Assigned Operators ===== -->
+                <aside class="sf-sidebar">
+                    <div class="sf-sidebar-header">
+                        <i class="fa fa-users"/> Operators
+                    </div>
+
+                    <div class="sf-operator-list">
+                        <t t-foreach="state.operators" t-as="op" t-key="op.id">
+                            <div t-attf-class="sf-operator-item sf-op-clickable {{ isSelectedOperator(op.user_id) ? 'sf-op-selected' : '' }}"
+                                 t-on-click="() => this.selectOperator(op.user_id)">
+                                <div class="sf-op-avatar">
+                                    <i class="fa fa-user-circle"/>
+                                </div>
+                                <div class="sf-op-info">
+                                    <span class="sf-op-name" t-esc="op.name"/>
+                                    <span t-if="isSelectedOperator(op.user_id)" class="sf-op-status">Selected</span>
+                                    <span t-else="" class="sf-op-status sf-op-off">Assigned</span>
+                                </div>
+                            </div>
+                        </t>
+                        <div t-if="state.operators.length === 0" class="sf-no-operators">
+                            No operators assigned
+                        </div>
+                    </div>
+
+                    <!-- Show All button when filtered -->
+                    <div t-if="state.selectedOperatorId" class="sf-clock-actions">
+                        <button class="sf-btn sf-btn-accent" t-on-click="() => this.selectOperator(this.state.selectedOperatorId)">
+                            <i class="fa fa-eye"/> Show All
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- ===== MAIN CONTENT: Work Order Cards ===== -->
+                <main class="sf-main">
+                    <!-- Loading -->
+                    <div t-if="state.loading" class="sf-loading">
+                        <div class="sf-spinner"/>
+                        <p>Loading work orders...</p>
+                    </div>
+
+                    <!-- Error -->
+                    <div t-if="state.error" class="sf-error">
+                        <i class="fa fa-exclamation-triangle"/>
+                        <span t-esc="state.error"/>
+                    </div>
+
+                    <!-- Empty -->
+                    <div t-if="!state.loading and filteredWorkOrders.length === 0" class="sf-empty">
+                        <i class="fa fa-inbox"/>
+                        <p>No active work orders for this work center</p>
+                    </div>
+
+                    <!-- Cards Grid -->
+                    <div t-if="!state.loading" class="sf-cards-grid">
+                        <t t-foreach="filteredWorkOrders" t-as="wo" t-key="wo.id">
+                            <div t-attf-class="sf-card {{ wo.machine_state === 'running' ? 'sf-card-running' : '' }} {{ wo.machine_state === 'paused' ? 'sf-card-paused' : '' }}">
+                                <!-- Card Header -->
+                                <div class="sf-card-header">
+                                    <div class="sf-card-title">
+                                        <span t-attf-class="sf-state-dot {{ getStateBadgeClass(wo.machine_state) }}"/>
+                                        <span class="sf-card-mo" t-esc="wo.mo_name"/>
+                                    </div>
+                                    <span t-attf-class="sf-badge {{ getStateBadgeClass(wo.machine_state) }}">
+                                        <t t-esc="getStateLabel(wo.machine_state)"/>
+                                    </span>
+                                </div>
+
+                                <!-- Product Info -->
+                                <div class="sf-card-product">
+                                    <span class="sf-product-name" t-esc="wo.product_name"/>
+                                    <span class="sf-product-qty">
+                                        Target: <strong t-esc="wo.product_qty"/> units
+                                    </span>
+                                    <span class="sf-product-operator" t-if="wo.responsible_name !== '-'">
+                                        <i class="fa fa-user"/> <t t-esc="wo.responsible_name"/>
+                                    </span>
+                                </div>
+
+                                <!-- Timer -->
+                                <div class="sf-card-timer">
+                                    <span class="sf-timer-value" t-esc="formatTimer(wo.running_seconds)"/>
+                                    <span class="sf-timer-blocked" t-if="wo.machine_state === 'paused'">
+                                        <i class="fa fa-pause-circle"/> <t t-esc="formatTimer(wo.current_blocked_seconds)"/>
+                                    </span>
+                                </div>
+
+                                <!-- Counts -->
+                                <div class="sf-card-counts">
+                                    <div class="sf-count sf-count-good">
+                                        <i class="fa fa-check"/> <span t-esc="wo.good_count"/> Good
+                                    </div>
+                                    <div class="sf-count sf-count-reject">
+                                        <i class="fa fa-times"/> <span t-esc="wo.reject_count"/> Reject
+                                    </div>
+                                    <div class="sf-count sf-count-total">
+                                        <i class="fa fa-cubes"/> <span t-esc="wo.total_count"/> Total
+                                    </div>
+                                </div>
+
+                                <!-- Control Buttons -->
+                                <div class="sf-card-controls">
+                                    <!-- STOP state: Start button -->
+                                    <t t-if="wo.machine_state === 'stop'">
+                                        <button class="sf-btn sf-btn-start" t-on-click="() => this.onStart(wo.id)">
+                                            <i class="fa fa-play"/> Start
+                                        </button>
+                                    </t>
+                                    <!-- RUNNING state: Block + Close -->
+                                    <t t-if="wo.machine_state === 'running'">
+                                        <button class="sf-btn sf-btn-block" t-on-click="() => this.openBlockDialog(wo.id)">
+                                            <i class="fa fa-wrench"/> Block
+                                        </button>
+                                        <button class="sf-btn sf-btn-close-prod" t-on-click="() => this.onCloseProduction(wo.id)">
+                                            <i class="fa fa-flag-checkered"/> Close
+                                        </button>
+                                    </t>
+                                    <!-- PAUSED/BLOCKED state: Resume -->
+                                    <t t-if="wo.machine_state === 'paused'">
+                                        <button class="sf-btn sf-btn-resume" t-on-click="() => this.onResume(wo.id)">
+                                            <i class="fa fa-play"/> Resume
+                                        </button>
+                                    </t>
+                                </div>
+
+                                <!-- Quick Actions -->
+                                <div class="sf-card-actions">
+                                    <button class="sf-action-btn" t-on-click="() => this.openProductionDialog(wo.id)" title="Record Production">
+                                        <i class="fa fa-check-circle"/> Production
+                                    </button>
+                                    <button class="sf-action-btn sf-action-scrap" t-on-click="() => this.openScrapDialog(wo.id)" title="Record Scrap">
+                                        <i class="fa fa-trash"/> Scrap
+                                    </button>
+                                    <button class="sf-action-btn" t-on-click="() => this.openInstructions(wo.worksheet_notes)" title="Work Instructions">
+                                        <i class="fa fa-book"/> SOP
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </main>
+            </div>
+
+            <!-- ===== MODAL: Record Production ===== -->
+            <div t-if="state.showProductionDialog" class="sf-modal-overlay" t-on-click="closeDialog">
+                <div class="sf-modal" t-on-click.stop="">
+                    <div class="sf-modal-header">
+                        <h3><i class="fa fa-check-circle"/> Record Production</h3>
+                        <button class="sf-modal-close" t-on-click="closeDialog"><i class="fa fa-times"/></button>
+                    </div>
+                    <div class="sf-modal-body">
+                        <label class="sf-label">Total Good Quantity</label>
+                        <input type="number" class="sf-input" min="0"
+                               t-att-value="state.productionQty"
+                               t-on-input="(ev) => this.onProductionQtyInput(ev)"/>
+                    </div>
+                    <div class="sf-modal-footer">
+                        <button class="sf-btn sf-btn-accent" t-on-click="submitProduction">
+                            <i class="fa fa-check"/> Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== MODAL: Record Scrap ===== -->
+            <div t-if="state.showScrapDialog" class="sf-modal-overlay" t-on-click="closeDialog">
+                <div class="sf-modal" t-on-click.stop="">
+                    <div class="sf-modal-header">
+                        <h3><i class="fa fa-trash"/> Record Scrap</h3>
+                        <button class="sf-modal-close" t-on-click="closeDialog"><i class="fa fa-times"/></button>
+                    </div>
+                    <div class="sf-modal-body">
+                        <label class="sf-label">Reject Quantity</label>
+                        <input type="number" class="sf-input" min="1"
+                               t-att-value="state.scrapQty"
+                               t-on-input="(ev) => this.onScrapQtyInput(ev)"/>
+                    </div>
+                    <div class="sf-modal-footer">
+                        <button class="sf-btn sf-btn-danger" t-on-click="submitScrap">
+                            <i class="fa fa-trash"/> Confirm Scrap
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== MODAL: Block Workcenter ===== -->
+            <div t-if="state.showBlockDialog" class="sf-modal-overlay" t-on-click="closeDialog">
+                <div class="sf-modal" t-on-click.stop="">
+                    <div class="sf-modal-header">
+                        <h3><i class="fa fa-wrench"/> Block Workcenter</h3>
+                        <button class="sf-modal-close" t-on-click="closeDialog"><i class="fa fa-times"/></button>
+                    </div>
+                    <div class="sf-modal-body">
+                        <label class="sf-label">Select Loss Reason</label>
+                        <div class="sf-loss-reason-list">
+                            <t t-foreach="state.lossReasons" t-as="reason" t-key="reason.id">
+                                <button t-attf-class="sf-loss-reason-item {{ state.blockLossId === reason.id ? 'sf-loss-selected' : '' }}"
+                                        t-on-click="() => this.state.blockLossId = reason.id">
+                                    <i class="fa fa-exclamation-triangle"/>
+                                    <span t-esc="reason.name"/>
+                                </button>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="sf-modal-footer">
+                        <button class="sf-btn sf-btn-block" t-on-click="submitBlock">
+                            <i class="fa fa-wrench"/> Confirm Block
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== MODAL: Work Instructions ===== -->
+            <div t-if="state.showInstructions" class="sf-modal-overlay" t-on-click="closeDialog">
+                <div class="sf-modal sf-modal-lg" t-on-click.stop="">
+                    <div class="sf-modal-header">
+                        <h3><i class="fa fa-book"/> Work Instructions (SOP)</h3>
+                        <button class="sf-modal-close" t-on-click="closeDialog"><i class="fa fa-times"/></button>
+                    </div>
+                    <div class="sf-modal-body sf-instructions-body">
+                        <p t-esc="state.instructionsText"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

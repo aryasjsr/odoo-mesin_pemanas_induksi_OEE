@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="quality_alert_stage_new" model="quality.alert.stage">
+            <field name="name">New</field>
+            <field name="sequence">10</field>
+            <field name="fold">False</field>
+        </record>
+        <record id="quality_alert_stage_in_progress" model="quality.alert.stage">
+            <field name="name">In Progress</field>
+            <field name="sequence">20</field>
+            <field name="fold">False</field>
+        </record>
+        <record id="quality_alert_stage_done" model="quality.alert.stage">
+            <field name="name">Done</field>
+            <field name="sequence">30</field>
+            <field name="fold">True</field>
+        </record>
+    </data>
+
+    <!-- Sequence for quality.check -->
+    <data noupdate="1">
+        <record id="seq_quality_check" model="ir.sequence">
+            <field name="name">Quality Check</field>
+            <field name="code">quality.check</field>
+            <field name="prefix">QC/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

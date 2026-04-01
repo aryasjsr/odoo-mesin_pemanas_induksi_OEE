@@ -1,0 +1,1037 @@
+// ===========================================================================
+// Brand Backend — Full Odoo 18 UI Override
+// Source: brandGuidelines.md
+//
+//  Primary Blue   #1E3A8A   —  navbar, headers, emphasis
+//  Accent Blue    #3B82F6   —  buttons, links, active states
+//  Background     #F3F4F6   —  page bg
+//  Card BG        #FFFFFF   —  forms, cards, panels
+//  Text Dark      #111827
+//  Border         #E5E7EB
+//  Success        #10B981
+//  Warning        #F59E0B
+//  Danger         #EF4444
+// ===========================================================================
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  1.  CSS CUSTOM PROPERTIES (root)                                       ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+:root {
+    // — Odoo brand —
+    --o-brand-odoo: #1E3A8A !important;
+    --o-brand-primary: #1E3A8A !important;
+    --o-brand-secondary: #3B82F6 !important;
+    --o-brand-lightsecondary: #93C5FD !important;
+
+    // — Bootstrap vars —
+    --bs-primary: #1E3A8A !important;
+    --bs-primary-rgb: 30, 58, 138 !important;
+    --bs-secondary: #374151 !important;
+    --bs-secondary-rgb: 55, 65, 81 !important;
+    --bs-success: #10B981 !important;
+    --bs-success-rgb: 16, 185, 129 !important;
+    --bs-info: #3B82F6 !important;
+    --bs-info-rgb: 59, 130, 246 !important;
+    --bs-warning: #F59E0B !important;
+    --bs-warning-rgb: 245, 158, 11 !important;
+    --bs-danger: #EF4444 !important;
+    --bs-danger-rgb: 239, 68, 68 !important;
+    --bs-light: #F3F4F6 !important;
+    --bs-dark: #111827 !important;
+
+    --bs-body-bg: #F3F4F6 !important;
+    --bs-body-color: #111827 !important;
+    --bs-link-color: #3B82F6 !important;
+    --bs-link-hover-color: #1E3A8A !important;
+    --bs-border-color: #E5E7EB !important;
+
+    // — Odoo View Variables —
+    --o-view-background-color: #F3F4F6 !important;
+    --o-control-panel-background-color: #FFFFFF !important;
+    --o-list-background-color: #FFFFFF !important;
+    --o-kanban-background-color: #F3F4F6 !important;
+
+    // — Navbar colours —
+    --o-navbar-background-color: #1E3A8A !important;
+    --o-navbar-color: #FFFFFF !important;
+
+    // — Action colour —
+    --o-action-color: #3B82F6 !important;
+
+    // — Main font —
+    --bs-body-font-family: 'Inter', 'Roboto', -apple-system, sans-serif !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  2.  GLOBAL BODY / WEB CLIENT                                           ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+html,
+body,
+.o_web_client,
+body.o_web_client {
+    background-color: #F3F4F6 !important;
+    color: #111827 !important;
+    font-family: 'Inter', 'Roboto', -apple-system, sans-serif !important;
+}
+
+.o_content,
+.o_action_manager,
+.o_action {
+    background-color: #F3F4F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  3.  TOP NAVBAR                                                         ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_main_navbar,
+.o_navbar,
+header.o_navbar,
+nav.o_main_navbar,
+nav.o_navbar {
+    background-color: #1E3A8A !important;
+    color: #FFFFFF !important;
+    border-bottom: none !important;
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.25) !important;
+}
+
+.o_main_navbar a,
+.o_main_navbar button,
+.o_main_navbar .dropdown-toggle,
+.o_main_navbar .nav-link,
+.o_main_navbar .o_nav_entry,
+.o_navbar a,
+.o_navbar .nav-link,
+.o_navbar .dropdown-toggle,
+.o_navbar .o_nav_entry {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.o_main_navbar a:hover,
+.o_main_navbar a:focus,
+.o_main_navbar button:hover,
+.o_main_navbar button:focus,
+.o_navbar a:hover,
+.o_navbar a:focus,
+.o_navbar .nav-link:hover,
+.o_navbar .nav-link:focus {
+    color: #FFFFFF !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.o_main_navbar .o_navbar_apps_menu button,
+.o_main_navbar .o_navbar_apps_menu button i,
+.o_main_navbar .o_menu_toggle {
+    color: #FFFFFF !important;
+}
+
+.o_main_navbar .o_menu_brand,
+.o_navbar .o_menu_brand {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+.o_main_navbar .o_user_menu .oe_topbar_name {
+    color: #FFFFFF !important;
+}
+
+.o_main_navbar .o_mail_systray_item .fa,
+.o_main_navbar .o_systray_item .fa {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.o_main_navbar .dropdown-menu,
+.o_navbar .dropdown-menu {
+    border: 1px solid #E5E7EB !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  4.  HOME MENU / APP SWITCHER                                           ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_home_menu,
+.o_home_menu_background,
+.o_apps {
+    background-color: #F3F4F6 !important;
+    background-image: none !important;
+}
+
+.o_home_menu .o_app .o_caption {
+    color: #111827 !important;
+}
+
+.o_home_menu .o_app .o_app_icon {
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.o_home_menu .o_app:hover .o_app_icon {
+    transform: scale(1.08) !important;
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.15) !important;
+}
+
+.o_home_menu_scrollable .o_menu_search input {
+    border-radius: 12px !important;
+    border: 2px solid #E5E7EB !important;
+    background: #FFFFFF !important;
+}
+
+.o_home_menu_scrollable .o_menu_search input:focus {
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  5.  MENU SECTIONS                                                      ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_menu_sections,
+.o_menu_sections .dropdown-toggle {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.o_menu_sections .dropdown-toggle:hover,
+.o_menu_sections .dropdown-toggle.show {
+    color: #FFFFFF !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.o_main_navbar .o_menu_sections .o_nav_entry.active,
+.o_main_navbar .o_menu_sections .o_nav_entry:hover {
+    color: #FFFFFF !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  6.  CONTROL PANEL                                                      ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_control_panel,
+.o_cp_top,
+.o_cp_bottom {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #E5E7EB !important;
+}
+
+.o_control_panel .breadcrumb-item a {
+    color: #3B82F6 !important;
+}
+
+.o_control_panel .breadcrumb-item.active {
+    color: #111827 !important;
+    font-weight: 600 !important;
+}
+
+.o_control_panel .breadcrumb-item+.breadcrumb-item::before {
+    color: #9CA3AF !important;
+}
+
+.o_control_panel .o_searchview {
+    background: #F3F4F6 !important;
+    border-radius: 8px !important;
+    border: 1px solid #E5E7EB !important;
+}
+
+.o_control_panel .o_searchview:focus-within {
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.o_control_panel .o_searchview input {
+    color: #111827 !important;
+}
+
+.o_searchview .o_searchview_facet {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    border-radius: 6px !important;
+    color: #1E3A8A !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  7.  BUTTONS                                                            ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.btn-primary {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+    color: #FFFFFF !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35) !important;
+}
+
+.btn-secondary {
+    background-color: #FFFFFF !important;
+    border-color: #D1D5DB !important;
+    color: #374151 !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background-color: #F3F4F6 !important;
+    border-color: #9CA3AF !important;
+    color: #111827 !important;
+}
+
+.btn-success {
+    background-color: #10B981 !important;
+    border-color: #10B981 !important;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+}
+
+.btn-warning {
+    background-color: #F59E0B !important;
+    border-color: #F59E0B !important;
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+    background-color: #D97706 !important;
+    border-color: #D97706 !important;
+}
+
+.btn-danger {
+    background-color: #EF4444 !important;
+    border-color: #EF4444 !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+    background-color: #DC2626 !important;
+    border-color: #DC2626 !important;
+}
+
+.btn-info {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+    color: #FFFFFF !important;
+}
+
+.btn-info:hover,
+.btn-info:focus {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+}
+
+.btn-outline-primary {
+    color: #1E3A8A !important;
+    border-color: #1E3A8A !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #1E3A8A !important;
+    color: #FFFFFF !important;
+}
+
+.btn-link {
+    color: #3B82F6 !important;
+}
+
+.btn-link:hover {
+    color: #1E3A8A !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  8.  FORM VIEW                                                          ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_form_view {
+    background-color: #F3F4F6 !important;
+}
+
+.o_form_view .o_form_sheet_bg {
+    background-color: #F3F4F6 !important;
+}
+
+.o_form_view .o_form_sheet_bg .o_form_sheet {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.o_form_view .oe_title .o_field_widget input {
+    color: #111827 !important;
+    font-weight: 700 !important;
+}
+
+.o_form_view input.o_input,
+.o_form_view select.o_input,
+.o_form_view textarea.o_input,
+input.o_input,
+select.o_input,
+textarea.o_input {
+    border-radius: 6px !important;
+    border: 1px solid #D1D5DB !important;
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+.o_form_view input.o_input:focus,
+.o_form_view select.o_input:focus,
+.o_form_view textarea.o_input:focus,
+input.o_input:focus,
+select.o_input:focus,
+textarea.o_input:focus {
+    border-color: #3B82F6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+.o_form_view .o_form_label,
+.o_form_label {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
+
+.o_form_view .o_notebook .nav-tabs {
+    border-bottom: 2px solid #E5E7EB !important;
+}
+
+.o_form_view .o_notebook .nav-tabs .nav-link {
+    color: #6B7280 !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    margin-bottom: -2px !important;
+    padding: 10px 20px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+.o_form_view .o_notebook .nav-tabs .nav-link:hover {
+    color: #1E3A8A !important;
+    border-bottom-color: rgba(30, 58, 138, 0.3) !important;
+}
+
+.o_form_view .o_notebook .nav-tabs .nav-link.active {
+    color: #1E3A8A !important;
+    border-bottom-color: #1E3A8A !important;
+    background: transparent !important;
+    font-weight: 600 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  9.  LIST VIEW                                                          ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_list_view {
+    background-color: #FFFFFF !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.o_list_view thead {
+    background-color: #F9FAFB !important;
+}
+
+.o_list_view thead th {
+    color: #374151 !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #E5E7EB !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+}
+
+.o_list_view tbody td {
+    border-bottom: 1px solid #F3F4F6 !important;
+    color: #111827 !important;
+}
+
+.o_list_view tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.04) !important;
+}
+
+.o_list_view tbody tr.o_data_row.o_list_record_selected,
+.o_list_view tbody tr.o_data_row.o_selected_row {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  10.  KANBAN VIEW                                                       ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_kanban_view {
+    background-color: #F3F4F6 !important;
+}
+
+.o_kanban_record,
+.oe_kanban_card {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.25s ease !important;
+}
+
+.o_kanban_record:hover,
+.oe_kanban_card:hover {
+    box-shadow: 0 4px 16px rgba(30, 58, 138, 0.1) !important;
+    transform: translateY(-1px) !important;
+}
+
+.o_kanban_group {
+    background-color: #F9FAFB !important;
+    border-radius: 12px !important;
+}
+
+.o_kanban_group .o_kanban_header {
+    color: #374151 !important;
+    font-weight: 600 !important;
+}
+
+.o_kanban_view .o_kanban_quick_add {
+    color: #3B82F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  11.  CHATTER / MAIL THREAD                                             ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_ChatterContainer,
+.o_Chatter {
+    background-color: #F3F4F6 !important;
+}
+
+.o_Message {
+    border-radius: 8px !important;
+}
+
+.o_Chatter .btn-primary {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+}
+
+.o_ChatterTopbar .btn,
+.o_Chatter .o_ChatterTopbar button {
+    border-radius: 6px !important;
+}
+
+.o_mail_activity .badge {
+    background-color: #3B82F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  12.  STATUS BAR                                                        ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_statusbar_status button.btn {
+    color: #6B7280 !important;
+    border-color: #D1D5DB !important;
+    background: #FFFFFF !important;
+    border-radius: 20px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+.o_statusbar_status button.btn:hover:not(.disabled) {
+    color: #1E3A8A !important;
+    border-color: #3B82F6 !important;
+    background: rgba(59, 130, 246, 0.05) !important;
+}
+
+.o_statusbar_status button.btn.o_arrow_button_current,
+.o_statusbar_status button.btn.btn-primary {
+    background: #1E3A8A !important;
+    border-color: #1E3A8A !important;
+    color: #FFFFFF !important;
+}
+
+.o_statusbar_status button.btn.disabled.o_arrow_button {
+    color: #10B981 !important;
+    border-color: #10B981 !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  13.  BADGES & TAGS                                                     ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.badge.text-bg-primary,
+.badge.bg-primary {
+    background-color: #1E3A8A !important;
+}
+
+.badge.text-bg-success,
+.badge.bg-success {
+    background-color: #10B981 !important;
+}
+
+.badge.text-bg-warning,
+.badge.bg-warning {
+    background-color: #F59E0B !important;
+    color: #111827 !important;
+}
+
+.badge.text-bg-danger,
+.badge.bg-danger {
+    background-color: #EF4444 !important;
+}
+
+.badge.text-bg-info,
+.badge.bg-info {
+    background-color: #3B82F6 !important;
+    color: #FFFFFF !important;
+}
+
+.badge.text-bg-secondary {
+    background-color: #374151 !important;
+}
+
+.o_field_many2many_tags .badge,
+.o_tag {
+    border-radius: 6px !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  14.  PROGRESS BARS                                                     ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.progress {
+    background-color: #E5E7EB !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+.progress-bar {
+    background-color: #3B82F6 !important;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.progress-bar.bg-success {
+    background-color: #10B981 !important;
+}
+
+.progress-bar.bg-warning {
+    background-color: #F59E0B !important;
+}
+
+.progress-bar.bg-danger {
+    background-color: #EF4444 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  15.  MODALS / DIALOGS                                                  ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.modal-content {
+    border-radius: 14px !important;
+    border: none !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+    overflow: hidden !important;
+}
+
+.modal-header {
+    background-color: #F9FAFB !important;
+    border-bottom: 1px solid #E5E7EB !important;
+    padding: 16px 24px !important;
+}
+
+.modal-header .modal-title {
+    color: #111827 !important;
+    font-weight: 600 !important;
+}
+
+.modal-body {
+    padding: 20px 24px !important;
+}
+
+.modal-footer {
+    border-top: 1px solid #E5E7EB !important;
+    background-color: #F9FAFB !important;
+    padding: 12px 24px !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.4 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  16.  CALENDAR VIEW                                                     ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_calendar_view .fc-button-primary {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+}
+
+.o_calendar_view .fc-button-primary:hover {
+    background-color: #2563EB !important;
+}
+
+.o_calendar_view .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #1E3A8A !important;
+}
+
+.o_calendar_view .fc-daygrid-day.fc-day-today,
+.o_calendar_view .fc-timegrid-slot.fc-day-today {
+    background-color: rgba(59, 130, 246, 0.06) !important;
+}
+
+.o_calendar_view .fc-event {
+    background-color: #3B82F6 !important;
+    border-color: #2563EB !important;
+    border-radius: 4px !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  17.  GRAPH / PIVOT VIEW                                                ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_graph_view,
+.o_pivot_view {
+    background-color: #FFFFFF !important;
+    border-radius: 12px !important;
+}
+
+.o_pivot_view th {
+    background-color: #F9FAFB !important;
+    color: #374151 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  18.  SETTINGS PAGE                                                     ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_base_settings .o_setting_container {
+    background-color: #F3F4F6 !important;
+}
+
+.o_base_settings .o_settings_container .o_form_view .o_form_sheet {
+    background-color: #FFFFFF !important;
+}
+
+.o_base_settings .o_setting_left_pane .o_settings_tab {
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E5E7EB !important;
+}
+
+.o_base_settings .o_setting_left_pane .selected {
+    color: #1E3A8A !important;
+    font-weight: 600 !important;
+    border-right: 3px solid #1E3A8A !important;
+    background: rgba(30, 58, 138, 0.05) !important;
+}
+
+.o_base_settings .o_setting_left_pane .o_settings_tab a {
+    color: #374151 !important;
+}
+
+.o_base_settings .o_setting_left_pane .o_settings_tab a:hover {
+    color: #1E3A8A !important;
+    background: rgba(30, 58, 138, 0.03) !important;
+}
+
+.o_base_settings .o_setting_box {
+    border-bottom: 1px solid #F3F4F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  19.  DROPDOWNS / AUTOCOMPLETE                                          ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.dropdown-menu {
+    border: 1px solid #E5E7EB !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+    padding: 6px !important;
+    background: #FFFFFF !important;
+}
+
+.dropdown-item {
+    border-radius: 6px !important;
+    color: #374151 !important;
+    padding: 8px 14px !important;
+    transition: all 0.15s ease !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: rgba(59, 130, 246, 0.06) !important;
+    color: #1E3A8A !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #3B82F6 !important;
+    color: #FFFFFF !important;
+}
+
+.ui-autocomplete {
+    border: 1px solid #E5E7EB !important;
+    border-radius: 8px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ui-menu-item a.ui-state-active,
+.ui-menu-item a.ui-state-focus {
+    background: rgba(59, 130, 246, 0.08) !important;
+    color: #1E3A8A !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  20.  SWITCH / TOGGLE                                                   ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.form-check-input:checked {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+}
+
+.form-check-input:focus {
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: #3B82F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  21.  LINKS & STAT BUTTONS                                              ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+a {
+    color: #3B82F6;
+}
+
+a:hover {
+    color: #1E3A8A;
+}
+
+.oe_stat_button {
+    border-color: #E5E7EB !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+}
+
+.oe_stat_button:hover {
+    background: rgba(59, 130, 246, 0.04) !important;
+    border-color: #3B82F6 !important;
+}
+
+.oe_stat_button .o_stat_info .o_stat_value {
+    color: #1E3A8A !important;
+    font-weight: 700 !important;
+}
+
+.oe_stat_button .o_stat_info .o_stat_text {
+    color: #6B7280 !important;
+}
+
+.oe_stat_button .o_button_icon {
+    color: #3B82F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  22.  FAVORITES STAR / PRIORITY                                         ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_priority .o_priority_star {
+    color: #D1D5DB !important;
+}
+
+.o_priority .o_priority_star.fa-star {
+    color: #F59E0B !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  23.  TOOLTIP / POPOVER                                                 ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.tooltip-inner {
+    background-color: #111827 !important;
+    border-radius: 6px !important;
+    font-size: 0.82rem !important;
+}
+
+.popover {
+    border: 1px solid #E5E7EB !important;
+    border-radius: 10px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  24.  PAGINATION                                                        ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_pager .o_pager_value {
+    color: #111827 !important;
+    font-weight: 600 !important;
+}
+
+.o_pager button {
+    color: #3B82F6 !important;
+}
+
+.o_pager button:hover {
+    color: #1E3A8A !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  25.  NOTIFICATIONS                                                     ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_notification_manager .o_notification {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.o_notification.border-success {
+    border-left: 4px solid #10B981 !important;
+}
+
+.o_notification.border-warning {
+    border-left: 4px solid #F59E0B !important;
+}
+
+.o_notification.border-danger {
+    border-left: 4px solid #EF4444 !important;
+}
+
+.o_notification.border-info {
+    border-left: 4px solid #3B82F6 !important;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  26.  SCROLLBAR STYLING                                                 ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #F3F4F6;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  27.  SELECTION HIGHLIGHT                                               ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+*::selection {
+    background: rgba(59, 130, 246, 0.2);
+    color: #111827;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║  28.  MISC OVERRIDES                                                    ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+.o_loading_indicator {
+    background-color: #3B82F6 !important;
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+    border-color: rgba(59, 130, 246, 0.2) !important;
+    color: #1E3A8A !important;
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    color: #065F46 !important;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.08) !important;
+    border-color: rgba(245, 158, 11, 0.2) !important;
+    color: #92400E !important;
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    border-color: rgba(239, 68, 68, 0.2) !important;
+    color: #991B1B !important;
+}
+
+.o_cp_switch_buttons .btn.active {
+    color: #1E3A8A !important;
+}
+
+.o_debug_manager .dropdown-toggle {
+    color: #FFFFFF !important;
+}
+
+.o_external_button {
+    color: #3B82F6 !important;
+}
+
+.o_form_view .o_field_widget.o_required_modifier>.o_input {
+    border-left: 3px solid #3B82F6 !important;
+}
+
+.o_field_kanban_state_selection .o_status {
+    border-color: #D1D5DB;
+}
+
+.o_field_kanban_state_selection .o_status.o_status_green {
+    background-color: #10B981 !important;
+    border-color: #10B981 !important;
+}
+
+.o_field_kanban_state_selection .o_status.o_status_red {
+    background-color: #EF4444 !important;
+    border-color: #EF4444 !important;
+}
+
+.o_DiscussSidebar {
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E5E7EB !important;
+}
+
+.o_DiscussSidebarCategory .o_DiscussSidebarCategoryItem:hover {
+    background-color: rgba(59, 130, 246, 0.05) !important;
+}
+
+.o_DiscussSidebarCategory .o_DiscussSidebarCategoryItem.o-active {
+    background-color: rgba(30, 58, 138, 0.08) !important;
+    color: #1E3A8A !important;
+}
+
+.o_Composer {
+    border-top: 1px solid #E5E7EB !important;
+}
+
+.o_activity_view .o_activity_record {
+    border-bottom: 1px solid #F3F4F6 !important;
+}
+
+input[type="checkbox"]:checked {
+    accent-color: #3B82F6;
+}

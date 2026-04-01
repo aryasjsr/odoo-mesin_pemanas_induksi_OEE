@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="mrp_modbus_register_map_form" model="ir.ui.view">
+        <field name="name">mrp.modbus.register.map.form</field>
+        <field name="model">mrp.modbus.register.map</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="config_id"/>
+                            <field name="name"/>
+                            <field name="variable_key"/>
+                            <field name="direction"/>
+                        </group>
+                        <group string="Register Details">
+                            <field name="register_type"/>
+                            <field name="register_address"/>
+                            <field name="data_type"/>
+                            <field name="scale_factor"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="mrp_modbus_register_map_list" model="ir.ui.view">
+        <field name="name">mrp.modbus.register.map.list</field>
+        <field name="model">mrp.modbus.register.map</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="config_id"/>
+                <field name="variable_key"/>
+                <field name="name"/>
+                <field name="register_type"/>
+                <field name="register_address"/>
+                <field name="data_type"/>
+                <field name="scale_factor"/>
+                <field name="direction"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_mrp_modbus_register_map" model="ir.actions.act_window">
+        <field name="name">Register Maps</field>
+        <field name="res_model">mrp.modbus.register.map</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

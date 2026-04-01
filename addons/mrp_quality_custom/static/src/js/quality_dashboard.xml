@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mrp_quality_custom.QualityDashboard">
+        <div class="qd-root">
+            <!-- Header -->
+            <div class="qd-header">
+                <div>
+                    <h1><i class="fa fa-shield"/> Quality Dashboard</h1>
+                    <p class="qd-subtitle">Quality Control &amp; Inspection Overview</p>
+                </div>
+                <span t-if="state.lastUpdate" class="qd-last-update">
+                    <i class="fa fa-refresh"/> <t t-esc="state.lastUpdate"/>
+                </span>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="state.loading" class="qd-loading">
+                <div class="qd-spinner"/>
+                <p>Loading quality data...</p>
+            </div>
+
+            <t t-if="!state.loading">
+                <!-- Summary Cards -->
+                <div class="qd-summary-row">
+                    <div class="qd-summary-card qd-card-pending" t-on-click="openChecks">
+                        <div class="qd-summary-icon"><i class="fa fa-clipboard-check fa-clipboard"/></div>
+                        <div class="qd-summary-info">
+                            <span class="qd-summary-number" t-esc="state.pendingCount"/>
+                            <span class="qd-summary-label">Pending Checks</span>
+                        </div>
+                    </div>
+                    <div class="qd-summary-card qd-card-alert" t-on-click="openAlerts">
+                        <div class="qd-summary-icon"><i class="fa fa-exclamation-triangle"/></div>
+                        <div class="qd-summary-info">
+                            <span class="qd-summary-number" t-esc="state.alertCount"/>
+                            <span class="qd-summary-label">Quality Alerts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Checks Table -->
+                <div class="qd-recent">
+                    <h3>Recent Quality Checks</h3>
+                    <div t-if="state.recentChecks.length === 0" class="qd-empty">
+                        No quality checks yet.
+                    </div>
+                    <table t-if="state.recentChecks.length > 0" class="qd-table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Control Point</th>
+                                <th>Type</th>
+                                <th>Product</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.recentChecks" t-as="c" t-key="c.id">
+                                <tr>
+                                    <td t-esc="c.name"/>
+                                    <td t-esc="c.control_point"/>
+                                    <td><span class="qd-type-badge" t-esc="c.check_type"/></td>
+                                    <td t-esc="c.product"/>
+                                    <td>
+                                        <span t-attf-class="qd-state-badge {{ getStateClass(c.state) }}">
+                                            <t t-esc="getStateLabel(c.state)"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

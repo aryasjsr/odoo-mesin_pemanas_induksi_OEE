@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inject Google Fonts for Inter -->
+    <template id="brand_google_fonts" inherit_id="web.layout" name="Brand Google Fonts">
+        <xpath expr="//head/meta[1]" position="before">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+        </xpath>
+    </template>
+</odoo>

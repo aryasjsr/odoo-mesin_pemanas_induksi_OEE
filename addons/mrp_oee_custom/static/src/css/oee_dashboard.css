@@ -1,0 +1,420 @@
+/* ==========================================================================
+   OEE Dashboard Styles
+   Brand: Elegant Blue — following brandGuidelines.md
+   ========================================================================== */
+
+:root {
+    --oee-primary: #1E3A8A;
+    --oee-accent: #3B82F6;
+    --oee-bg: #F3F4F6;
+    --oee-card-bg: #FFFFFF;
+    --oee-text-dark: #111827;
+    --oee-text-muted: #6B7280;
+    --oee-good: #10B981;
+    --oee-warning: #F59E0B;
+    --oee-critical: #EF4444;
+    --oee-radius: 12px;
+    --oee-shadow: 0 4px 24px rgba(30, 58, 138, 0.08);
+    --oee-shadow-hover: 0 8px 32px rgba(30, 58, 138, 0.15);
+    --oee-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Dashboard Container --- */
+.oee-dashboard {
+    background: var(--oee-bg);
+    height: 100%;
+    overflow-y: auto;
+    padding: 24px 32px;
+    font-family: 'Inter', 'Roboto', -apple-system, sans-serif;
+    color: var(--oee-text-dark);
+}
+
+/* --- Header --- */
+.oee-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding: 24px 32px;
+    background: linear-gradient(135deg, var(--oee-primary) 0%, var(--oee-accent) 100%);
+    border-radius: var(--oee-radius);
+    color: #FFFFFF;
+    box-shadow: var(--oee-shadow);
+}
+
+.oee-header h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.oee-subtitle {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    font-weight: 400;
+}
+
+.oee-last-update {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- Loading / Error / Empty States --- */
+.oee-loading,
+.oee-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--oee-text-muted);
+}
+
+.oee-loading .fa,
+.oee-empty .fa {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: var(--oee-accent);
+}
+
+.oee-spinner {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    border: 4px solid var(--oee-bg);
+    border-top-color: var(--oee-accent);
+    border-radius: 50%;
+    animation: oee-spin 0.8s linear infinite;
+}
+
+@keyframes oee-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.oee-error {
+    background: #FEF2F2;
+    border: 1px solid var(--oee-critical);
+    border-radius: var(--oee-radius);
+    padding: 16px 24px;
+    color: var(--oee-critical);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+/* --- Workcenter Section --- */
+.oee-workcenter-section {
+    background: var(--oee-card-bg);
+    border-radius: var(--oee-radius);
+    box-shadow: var(--oee-shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+    transition: var(--oee-transition);
+}
+
+.oee-workcenter-section:hover {
+    box-shadow: var(--oee-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* --- Workcenter Header --- */
+.oee-wc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    border-bottom: 1px solid #E5E7EB;
+    background: linear-gradient(90deg, rgba(30, 58, 138, 0.03) 0%, transparent 100%);
+}
+
+.oee-wc-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.oee-wc-title .fa {
+    font-size: 1.25rem;
+    color: var(--oee-primary);
+}
+
+.oee-wc-title h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--oee-text-dark);
+}
+
+.oee-wc-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.oee-active-wo {
+    font-size: 0.85rem;
+    color: var(--oee-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- State Badge --- */
+.oee-state-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.state-running {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--oee-good);
+}
+
+.state-paused {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--oee-warning);
+}
+
+.state-stop {
+    background: rgba(107, 114, 128, 0.12);
+    color: var(--oee-text-muted);
+}
+
+/* --- Gauges Row (4 Cards) --- */
+.oee-gauges-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 28px;
+}
+
+@media (max-width: 992px) {
+    .oee-gauges-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .oee-gauges-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Individual Gauge Card --- */
+.oee-gauge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px;
+    border-radius: var(--oee-radius);
+    background: var(--oee-bg);
+    transition: var(--oee-transition);
+}
+
+.oee-gauge-card:hover {
+    background: #E8EDF5;
+    transform: scale(1.03);
+}
+
+.oee-gauge-card-main {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.06) 0%, rgba(59, 130, 246, 0.06) 100%);
+    border: 2px solid rgba(30, 58, 138, 0.15);
+}
+
+.oee-gauge-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--oee-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+/* --- SVG Circular Gauge --- */
+.oee-gauge-svg-container {
+    position: relative;
+    width: 130px;
+    height: 130px;
+}
+
+.oee-gauge-svg-main {
+    width: 150px;
+    height: 150px;
+}
+
+.oee-gauge-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.oee-gauge-bg {
+    fill: none;
+    stroke: #E5E7EB;
+    stroke-width: 8;
+}
+
+.oee-gauge-progress {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        stroke 0.4s ease;
+}
+
+.oee-gauge-progress.oee-good {
+    stroke: var(--oee-good);
+}
+
+.oee-gauge-progress.oee-warning {
+    stroke: var(--oee-warning);
+}
+
+.oee-gauge-progress.oee-critical {
+    stroke: var(--oee-critical);
+}
+
+/* --- Gauge Center Value --- */
+.oee-gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.oee-gauge-value span {
+    font-size: 2rem;
+    display: block;
+}
+
+.oee-gauge-value small {
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.oee-gauge-value.oee-good {
+    color: var(--oee-good);
+}
+
+.oee-gauge-value.oee-warning {
+    color: var(--oee-warning);
+}
+
+.oee-gauge-value.oee-critical {
+    color: var(--oee-critical);
+}
+
+/* --- Production Counts Row --- */
+.oee-counts-row {
+    display: flex;
+    gap: 16px;
+    padding: 0 28px 24px;
+}
+
+.oee-count-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--oee-bg);
+    border-radius: 8px;
+    flex: 1;
+    transition: var(--oee-transition);
+}
+
+.oee-count-card:hover {
+    background: #E8EDF5;
+}
+
+.oee-count-icon {
+    font-size: 1.5rem;
+}
+
+.oee-count-icon.oee-good {
+    color: var(--oee-good);
+}
+
+.oee-count-icon.oee-critical {
+    color: var(--oee-critical);
+}
+
+.oee-count-icon.oee-primary {
+    color: var(--oee-accent);
+}
+
+.oee-count-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.oee-count-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--oee-text-dark);
+}
+
+.oee-count-label {
+    font-size: 0.75rem;
+    color: var(--oee-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+@media (max-width: 576px) {
+    .oee-counts-row {
+        flex-direction: column;
+    }
+}
+
+/* --- Time Breakdown Row --- */
+.oee-time-row {
+    display: flex;
+    gap: 12px;
+    padding: 0 28px 20px;
+}
+
+.oee-time-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--oee-bg);
+    border: 1px solid #E5E7EB;
+}
+
+.oee-time-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--oee-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.oee-time-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--oee-text-dark);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.oee-time-operating .oee-time-value { color: var(--oee-good); }
+.oee-time-blocked .oee-time-value   { color: var(--oee-warning); }

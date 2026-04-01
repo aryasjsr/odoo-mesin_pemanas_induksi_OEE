@@ -1,0 +1,222 @@
+// brand_backend.scss
+// Forcing Odoo 18 root properties globally
+:root {
+    // Bootstrap CSS Variables
+    --bs-primary: #1E3A8A !important;
+    --bs-secondary: #374151 !important;
+    --bs-info: #3B82F6 !important;
+    --bs-success: #10B981 !important;
+    --bs-warning: #F59E0B !important;
+    --bs-danger: #EF4444 !important;
+    --bs-light: #F3F4F6 !important;
+    --bs-dark: #111827 !important;
+
+    --bs-primary-rgb: 30, 58, 138 !important;
+    --bs-secondary-rgb: 55, 65, 81 !important;
+    --bs-info-rgb: 59, 130, 246 !important;
+    --bs-success-rgb: 16, 185, 129 !important;
+    --bs-warning-rgb: 245, 158, 11 !important;
+    --bs-danger-rgb: 239, 68, 68 !important;
+
+    --bs-body-bg: #F3F4F6 !important;
+    --bs-body-color: #111827 !important;
+
+    --bs-link-color: #3B82F6 !important;
+    --bs-link-hover-color: #1E3A8A !important;
+    --bs-border-color: #E5E7EB !important;
+
+    // Odoo Brand Variables
+    --o-brand-odoo: #1E3A8A !important;
+    --o-brand-primary: #1E3A8A !important;
+    --o-brand-secondary: #3B82F6 !important;
+    --o-brand-lightsecondary: #3B82F6 !important;
+
+    --primary: #1E3A8A !important;
+    --secondary: #374151 !important;
+    --info: #3B82F6 !important;
+    --success: #10B981 !important;
+    --warning: #F59E0B !important;
+    --danger: #EF4444 !important;
+
+    // View Colors
+    --o-view-background-color: #F3F4F6 !important;
+    --o-control-panel-background-color: #FFFFFF !important;
+    --o-list-background-color: #FFFFFF !important;
+    --o-kanban-background-color: #F3F4F6 !important;
+
+    // Navbar
+    --o-navbar-background-color: #1E3A8A !important;
+    --o-navbar-color: #FFFFFF !important;
+}
+
+// Ensure the navbar is explicitly overridden
+.o_main_navbar,
+.o_navbar,
+header.o_navbar,
+nav.o_navbar {
+    background-color: #1E3A8A !important;
+    color: #FFFFFF !important;
+    border-bottom: none !important;
+}
+
+.o_navbar .dropdown-toggle,
+.o_navbar .nav-link,
+.o_navbar .o_nav_entry {
+    color: #FFFFFF !important;
+}
+
+.o_navbar .o_navbar_apps_menu button i {
+    color: #FFFFFF !important;
+}
+
+.o_main_navbar>a:hover,
+.o_main_navbar>a:focus,
+.o_main_navbar>button:hover,
+.o_main_navbar>button:focus,
+.o_navbar .nav-link:hover,
+.o_navbar .nav-link:focus {
+    background-color: #162E69 !important;
+    color: #FFFFFF !important;
+}
+
+// Background overrides
+html,
+body,
+.o_web_client,
+.o_content,
+body.o_web_client {
+    background-color: #F3F4F6 !important;
+    color: #111827 !important;
+}
+
+.o_action_manager {
+    background-color: #F3F4F6 !important;
+}
+
+// App switcher Home menu
+.o_home_menu,
+.o_home_menu_background {
+    background-color: #F3F4F6 !important;
+    background-image: none !important;
+}
+
+// Control Panel
+.o_control_panel {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #E5E7EB !important;
+}
+
+// Forms and Cards
+.o_form_view .o_form_sheet_bg,
+.o_form_view .o_form_sheet_bg .o_form_sheet,
+.oe_kanban_card,
+.o_kanban_record {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.o_list_view {
+    background-color: #FFFFFF !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.o_list_view thead {
+    background-color: #F9FAFB !important;
+    color: #111827 !important;
+}
+
+.o_list_view th {
+    border-bottom: 2px solid #E5E7EB !important;
+}
+
+.o_list_view td {
+    border-bottom: 1px solid #E5E7EB !important;
+}
+
+// Inputs
+input.o_input,
+select.o_input,
+textarea.o_input {
+    border-radius: 6px !important;
+    border: 1px solid #D1D5DB !important;
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+}
+
+input.o_input:focus,
+select.o_input:focus,
+textarea.o_input:focus {
+    border-color: #3B82F6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+// Button overrides
+.btn-primary {
+    background-color: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+    color: #FFFFFF !important;
+    border-radius: 6px !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+}
+
+.btn-secondary {
+    background-color: #FFFFFF !important;
+    border-color: #D1D5DB !important;
+    color: #374151 !important;
+    border-radius: 6px !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background-color: #F3F4F6 !important;
+    border-color: #9CA3AF !important;
+    color: #111827 !important;
+}
+
+// Badges / Tags
+.badge.text-bg-success {
+    background-color: #10B981 !important;
+}
+
+.badge.text-bg-warning {
+    background-color: #F59E0B !important;
+}
+
+.badge.text-bg-danger {
+    background-color: #EF4444 !important;
+}
+
+.badge.text-bg-info {
+    background-color: #3B82F6 !important;
+}
+
+// Progress bars / Gauges generic fallback
+.progress-bar {
+    background-color: #3B82F6 !important;
+}
+
+// Dialogs / Modals
+.modal-content {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.modal-header {
+    background-color: #F9FAFB !important;
+    border-bottom: 1px solid #E5E7EB !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}

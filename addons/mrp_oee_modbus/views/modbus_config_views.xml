@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="mrp_modbus_config_form" model="ir.ui.view">
+        <field name="name">mrp.modbus.config.form</field>
+        <field name="model">mrp.modbus.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!-- Test Connection: visible only when not already polling or connecting -->
+                    <button name="action_test_connection"
+                            string="🔌 Test Connection"
+                            type="object"
+                            class="btn-primary"
+                            invisible="polling_state in ('polling', 'connecting')"/>
+
+                    <!-- Start Polling: only when stopped/error/testing -->
+                    <button name="action_start_polling"
+                            string="▶ Start Polling"
+                            type="object"
+                            class="btn-success"
+                            invisible="polling_state in ('polling', 'connecting')"/>
+
+                    <!-- Stop Polling: only when actively polling -->
+                    <button name="action_stop_polling"
+                            string="⏹ Stop Polling"
+                            type="object"
+                            class="btn-danger"
+                            invisible="polling_state != 'polling'"/>
+
+                    <!-- Real-time operational state statusbar -->
+                    <field name="polling_state" widget="statusbar"
+                           statusbar_visible="stopped,connecting,polling,error"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Mesin Induksi #1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Connection Settings">
+                            <field name="host"/>
+                            <field name="port"/>
+                            <field name="slave_id"/>
+                            <field name="timeout"/>
+                            <field name="retries"/>
+                            <field name="reconnect_delay"/>
+                            <field name="polling_interval"/>
+                        </group>
+                        <group string="Status &amp; Linking">
+                            <field name="is_active"/>
+                            <field name="polling_state" readonly="1"/>
+                            <field name="connection_status" readonly="1"/>
+                            <field name="last_connected"/>
+                            <field name="workcenter_id"/>
+                        </group>
+                    </group>
+
+                    <!-- Activity Log (compact inline) -->
+                    <separator string="Activity Log"/>
+                    <div class="d-flex justify-content-end mb-2">
+                        <button name="action_clear_logs" string="🗑 Clear Logs"
+                                type="object" class="btn-sm btn-secondary"/>
+                    </div>
+                    <field name="log_ids" nolabel="1" readonly="1" limit="30">
+                        <list decoration-danger="level == 'error'"
+                              decoration-warning="level == 'warning'"
+                              decoration-success="level == 'info'"
+                              create="0" delete="0" edit="0">
+                            <field name="timestamp" string="Time"/>
+                            <field name="level" string="Level" width="100px"/>
+                            <field name="message" string="Event"/>
+                        </list>
+                    </field>
+
+                    <notebook>
+                        <page string="Register Map">
+                            <field name="register_map_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="variable_key"/>
+                                    <field name="name"/>
+                                    <field name="register_type"/>
+                                    <field name="register_address"/>
+                                    <field name="data_type"/>
+                                    <field name="scale_factor"/>
+                                    <field name="direction"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"
+                                   placeholder="Optional notes about this Modbus configuration..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="mrp_modbus_config_list" model="ir.ui.view">
+        <field name="name">mrp.modbus.config.list</field>
+        <field name="model">mrp.modbus.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="host"/>
+                <field name="port"/>
+                <field name="workcenter_id"/>
+                <field name="polling_interval"/>
+                <field name="polling_state"
+                       decoration-success="polling_state == 'polling'"
+                       decoration-danger="polling_state == 'error'"
+                       decoration-warning="polling_state in ('testing', 'connecting')"
+                       decoration-muted="polling_state == 'stopped'"/>
+                <field name="connection_status"
+                       decoration-success="connection_status == 'connected'"
+                       decoration-danger="connection_status == 'error'"
+                       decoration-muted="connection_status == 'disconnected'"/>
+                <field name="last_connected"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_mrp_modbus_config" model="ir.actions.act_window">
+        <field name="name">Modbus Configurations</field>
+        <field name="res_model">mrp.modbus.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
