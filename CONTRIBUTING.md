@@ -14,7 +14,7 @@ Panduan untuk kontributor yang ingin berkontribusi pada project Odoo Enterprise 
 
 2. **Fork repository** - Buat fork repo di GitHub Anda
 
-3. **Clone repository** - `git clone <YOUR_FORK_URL>`
+3. **Clone repository** - `git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git`
 
 4. **Create branch** - Buat branch untuk fitur/fix Anda
 

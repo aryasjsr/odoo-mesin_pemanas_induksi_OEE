@@ -78,8 +78,8 @@ postgres=# \q
 ```bash
 # Buka Command Prompt / PowerShell
 cd D:\ARYA\SEMESTER 8\ENTERPRISE AUTOMATION
-git clone <your-repo-url>
-cd Odoo
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git
+cd odoo-mesin_pemanas_induksi_OEE
 ```
 
 ### 6️⃣ Setup Python Virtual Environment

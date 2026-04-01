@@ -66,7 +66,7 @@ sudo apt install -y libpq-dev npm
 cd ~/workspace
 
 # Clone repository
-git clone <YOUR_GITHUB_REPO_URL> odoo-project
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git odoo-project
 cd odoo-project
 
 # Create virtual environment

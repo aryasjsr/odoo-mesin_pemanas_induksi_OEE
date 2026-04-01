@@ -51,8 +51,8 @@ Platform otomasi enterprise berbasis Odoo 18.0 dengan fitur-fitur custom:
 
 ```bash
 # 1. Clone repository
-git clone <YOUR_REPO_URL>
-cd odoo-project
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git
+cd odoo-mesin_pemanas_induksi_OEE
 
 # 2. Create .env file
 cp config/.env.example .env
@@ -90,7 +90,7 @@ docker-compose -f setup/docker-compose.yml down
 
 ```bash
 # 1. Clone repository
-git clone <YOUR_REPO_URL>
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git
 cd odoo-project
 
 # 2. Follow detailed guide
@@ -119,8 +119,8 @@ pip install -r setup/requirements.txt
 
 ```bash
 # 1. Clone repository
-git clone <YOUR_REPO_URL>
-cd odoo-project
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git
+cd odoo-mesin_pemanas_induksi_OEE
 
 # 2. Follow detailed guide
 start docs\SETUP_NATIVE_WINDOWS.md
@@ -266,8 +266,8 @@ Key settings:
 ### Clone Repository
 
 ```bash
-git clone <YOUR_REPO_URL>
-cd odoo-project
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git
+cd odoo-mesin_pemanas_induksi_OEE
 ```
 
 ### Branch Strategy
@@ -354,7 +354,8 @@ psql -U odoo -h localhost odoo < backup.sql
 
 1. **For Docker User:**
    ```bash
-   git clone <repo>
+   git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git
+   cd odoo-mesin_pemanas_induksi_OEE
    cp config/.env.example .env
    # Edit .env
    docker-compose -f setup/docker-compose.yml up -d

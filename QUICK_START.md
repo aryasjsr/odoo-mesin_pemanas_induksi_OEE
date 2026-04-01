@@ -17,7 +17,7 @@ Panduan cepat untuk memulai development dengan project ini.
 
 ```bash
 # 1. Clone
-git clone <REPO_URL> && cd odoo-project
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git && cd odoo-project
 
 # 2. Copy env file
 cp config/.env.example .env
@@ -56,6 +56,8 @@ docker-compose -f setup/docker-compose.yml down
 ```bash
 # Read detailed guide
 cat docs/SETUP_NATIVE_LINUX.md
+
+**Repository:** https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE
 ```
 
 ---
@@ -81,7 +83,7 @@ type docs\SETUP_NATIVE_WINDOWS.md
 sudo -u postgres psql -c "CREATE USER odoo WITH PASSWORD 'odoo' CREATEDB;"
 
 # 3. Clone & setup
-git clone <REPO_URL> && cd odoo-project
+git clone https://github.com/aryasjsr/odoo-mesin_pemanas_induksi_OEE.git && cd odoo-mesin_pemanas_induksi_OEE
 python3 -m venv venv && source venv/bin/activate
 pip install -r setup/requirements.txt
 
