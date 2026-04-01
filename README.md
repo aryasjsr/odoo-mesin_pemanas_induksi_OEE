@@ -1,6 +1,6 @@
 # Odoo Enterprise Automation Project
 
-Project Odoo dengan custom modules untuk Manufacturing Resource Planning (MRP), Quality Management, dan Shop Floor Integration.
+Project Odoo dengan custom modules untuk Manufacturing Resource Planning (MRP), OEE, Quality Management, dan Shop Floor Integration.
 
 ---
 
