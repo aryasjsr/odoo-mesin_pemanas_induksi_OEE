@@ -1,3 +1,16 @@
+# Ignore .gitignore itself (local config)
+.gitignore
+
+# Exclude specific docs (internal/working docs - NOT in repo)
+docs/StudiKasus_Manual.md
+docs/task.md
+docs/walkthrough.md
+docs/brandGuidelines.md
+docs/agents.md
+docs/AddedFeature_Modbus.md
+docs/implementation_plan.md
+docs/gemini.md
+
 # Database & Data
 db-data/
 odoo-data/
