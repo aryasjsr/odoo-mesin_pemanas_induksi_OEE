@@ -377,8 +377,6 @@ Untuk pertanyaan atau issues:
 
 ## 📄 License
 
-[Specify your license here]
-
 ---
 
 ## 📝 Changelog
