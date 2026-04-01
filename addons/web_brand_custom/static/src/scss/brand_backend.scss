@@ -440,7 +440,6 @@ textarea.o_input:focus {
 .o_list_view {
     background-color: #FFFFFF !important;
     border-radius: 12px !important;
-    overflow: hidden !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
@@ -455,6 +454,10 @@ textarea.o_input:focus {
     font-size: 0.85rem !important;
     text-transform: uppercase !important;
     letter-spacing: 0.03em !important;
+    vertical-align: middle !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    line-height: 1.2 !important;
 }
 
 .o_list_view tbody td {
