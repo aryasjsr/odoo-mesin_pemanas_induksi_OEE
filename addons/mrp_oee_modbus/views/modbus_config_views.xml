@@ -57,6 +57,20 @@
                         </group>
                     </group>
 
+                    <!-- HMI Real-time Status (only visible when polling) -->
+                    <group string="HMI Real-time Status" invisible="polling_state != 'polling'">
+                        <group>
+                            <field name="hmi_m_status" readonly="1"/>
+                            <field name="hmi_good_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="hmi_reject_count" readonly="1"/>
+                            <field name="hmi_wo_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- State Machine Internals (debug section in notebook) -->
+
                     <!-- Activity Log (compact inline) -->
                     <separator string="Activity Log"/>
                     <div class="d-flex justify-content-end mb-2">
@@ -75,6 +89,20 @@
                     </field>
 
                     <notebook>
+                        <page string="Loss Reason Map">
+                            <p class="text-muted">
+                                Map each REASON_CODE value (from register 40004) to a Productivity Loss.
+                                When the machine stops, the HMI sends a code — Odoo uses this table to
+                                select the correct loss type for the downtime record.
+                            </p>
+                            <field name="reason_map_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="reason_code" string="Nomor Code"/>
+                                    <field name="description" string="Description"/>
+                                    <field name="loss_id" string="Productivity Loss"/>
+                                </list>
+                            </field>
+                        </page>
                         <page string="Register Map">
                             <field name="register_map_ids" nolabel="1">
                                 <list editable="bottom">
@@ -91,6 +119,18 @@
                         <page string="Notes">
                             <field name="notes" nolabel="1"
                                    placeholder="Optional notes about this Modbus configuration..."/>
+                        </page>
+                        <page string="State Machine (Debug)">
+                            <group>
+                                <group string="Last Known Values">
+                                    <field name="last_m_status" readonly="1"/>
+                                    <field name="last_good_count" readonly="1"/>
+                                    <field name="last_reject_count" readonly="1"/>
+                                </group>
+                                <group string="Active Record">
+                                    <field name="active_productivity_id" readonly="1"/>
+                                </group>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>

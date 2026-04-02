@@ -12,7 +12,6 @@
     'depends': ['mrp', 'mrp_shopfloor_custom'],
     'data': [
         'security/ir.model.access.csv',
-        'data/loss_reason_data.xml',
         'views/oee_dashboard_action.xml',
     ],
     'assets': {

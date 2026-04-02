@@ -14,7 +14,20 @@ class ShopfloorAPIController(http.Controller):
         try:
             # --- Workcenters ---
             workcenters = request.env['mrp.workcenter'].sudo().search([])
-            wc_data = [{'id': wc.id, 'name': wc.name} for wc in workcenters]
+            wc_data = []
+            for wc in workcenters:
+                wc_info = {'id': wc.id, 'name': wc.name}
+                # Include real-time HMI data from Modbus config if available
+                modbus_config = request.env['mrp.modbus.config'].sudo().search([
+                    ('workcenter_id', '=', wc.id),
+                    ('polling_state', '=', 'polling'),
+                ], limit=1)
+                if modbus_config:
+                    wc_info['hmi_m_status'] = modbus_config.hmi_m_status
+                    wc_info['hmi_good_count'] = modbus_config.hmi_good_count
+                    wc_info['hmi_reject_count'] = modbus_config.hmi_reject_count
+                    wc_info['hmi_wo_id'] = modbus_config.hmi_wo_id
+                wc_data.append(wc_info)
 
             # --- Work Orders (not done/cancel) ---
             wo_domain = [('state', 'not in', ['done', 'cancel'])]

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Loss Reasons for Induction Heating Machine -->
+        <record id="loss_reason_equipment_failure" model="mrp.workcenter.productivity.loss">
+            <field name="name">Equipment Failure</field>
+            <field name="loss_type">availability</field>
+            <field name="manual">True</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="loss_reason_material_shortage" model="mrp.workcenter.productivity.loss">
+            <field name="name">Material Shortage</field>
+            <field name="loss_type">availability</field>
+            <field name="manual">True</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="loss_reason_setup_adjustment" model="mrp.workcenter.productivity.loss">
+            <field name="name">Setup &amp; Adjustment</field>
+            <field name="loss_type">availability</field>
+            <field name="manual">True</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="loss_reason_process_defect" model="mrp.workcenter.productivity.loss">
+            <field name="name">Process Defect</field>
+            <field name="loss_type">performance</field>
+            <field name="manual">True</field>
+            <field name="sequence">40</field>
+        </record>
+    </data>
+</odoo>

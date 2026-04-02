@@ -46,6 +46,12 @@
                                 <span t-attf-class="oee-state-badge {{ getStateClass(wc.machine_state) }}">
                                     <t t-esc="getStateLabel(wc.machine_state)"/>
                                 </span>
+                                <!-- HMI Modbus realtime status badge (only when polling is active) -->
+                                <span t-if="wc.modbus_polling"
+                                      t-attf-class="oee-hmi-badge {{ wc.hmi_m_status === 1 ? 'oee-hmi-running' : 'oee-hmi-stopped' }}">
+                                    <i class="fa fa-plug"/>
+                                    HMI: <t t-esc="wc.hmi_m_status === 1 ? 'Running' : 'Stopped'"/>
+                                </span>
                                 <span class="oee-active-wo">
                                     <i class="fa fa-clipboard"/> WO: <t t-esc="wc.active_wo"/>
                                 </span>

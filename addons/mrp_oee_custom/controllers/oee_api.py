@@ -87,6 +87,12 @@ class OEEAPIController(http.Controller):
                     ('machine_state', '!=', 'stop'),
                 ], limit=1, order='write_date desc')
 
+                # Modbus HMI realtime status (if polling is active)
+                modbus_config = request.env['mrp.modbus.config'].sudo().search([
+                    ('workcenter_id', '=', wc.id),
+                    ('polling_state', '=', 'polling'),
+                ], limit=1)
+
                 data.append({
                     'id': wc.id,
                     'name': wc.name,
@@ -103,6 +109,9 @@ class OEEAPIController(http.Controller):
                     'good_count': total_good,
                     'reject_count': total_reject,
                     'total_count': total_count,
+                    # Modbus HMI realtime status
+                    'hmi_m_status': modbus_config.hmi_m_status if modbus_config else None,
+                    'modbus_polling': bool(modbus_config),
                 })
 
             return {'status': 'ok', 'data': data}

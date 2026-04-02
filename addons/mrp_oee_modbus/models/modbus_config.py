@@ -54,7 +54,24 @@ class MrpModbusConfig(models.Model):
     register_map_ids = fields.One2many('mrp.modbus.register.map', 'config_id',
                                        string='Register Map')
     log_ids = fields.One2many('mrp.modbus.log', 'config_id', string='Activity Log')
+    reason_map_ids = fields.One2many('mrp.modbus.reason.map', 'config_id', string='Reason Code Map')
     notes = fields.Text(string='Notes')
+
+    # State machine fields (persisted across poll cycles)
+    last_m_status = fields.Integer(string='Last M_STATUS', default=-1, readonly=True,
+                                   help='-1=unknown, 0=Stop, 1=Running')
+    last_good_count = fields.Integer(string='Last GOOD_COUNT', default=0, readonly=True)
+    last_reject_count = fields.Integer(string='Last REJECT_COUNT', default=0, readonly=True)
+    active_productivity_id = fields.Many2one(
+        'mrp.workcenter.productivity', string='Active Productivity Record',
+        readonly=True, ondelete='set null',
+        help='Currently open (no date_end) productivity record created by polling')
+
+    # HMI real-time display fields (updated each poll cycle)
+    hmi_m_status = fields.Integer(string='HMI Machine Status', default=0, readonly=True)
+    hmi_good_count = fields.Integer(string='HMI Good Count', default=0, readonly=True)
+    hmi_reject_count = fields.Integer(string='HMI Reject Count', default=0, readonly=True)
+    hmi_wo_id = fields.Integer(string='HMI Active WO ID', default=0, readonly=True)
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Profile name must be unique.'),
@@ -259,16 +276,66 @@ class MrpModbusConfig(models.Model):
         return True
 
     # -------------------------------------------------------------------------
-    # OEE Sync (called from poll loop — uses config directly, no back-ref)
+    # OEE Sync (called from poll loop — full state machine + delta counter)
     # -------------------------------------------------------------------------
+
+    REASON_CODE_MAP = {
+        0: 'None',
+        1: 'Setup',
+        2: 'Equipment Failure',
+        3: 'Material Shortage',
+        4: 'Process Defect',
+    }
+
+    def _get_loss_for_reason(self, reason_code):
+        """Map REASON_CODE integer to mrp.workcenter.productivity.loss record.
+
+        First checks configurable reason_map_ids on this config.
+        Falls back to searching by name, then any availability loss.
+        """
+        # 1. Try configurable mapping first
+        mapping = self.reason_map_ids.filtered(lambda r: r.reason_code == reason_code)
+        if mapping and mapping[0].loss_id:
+            return mapping[0].loss_id
+
+        # 2. Fallback: search by conventional name
+        Loss = self.env['mrp.workcenter.productivity.loss'].sudo()
+        name_map = {
+            1: 'Setup',
+            2: 'Equipment Failure',
+            3: 'Material Shortage',
+            4: 'Process Defect',
+        }
+        name = name_map.get(reason_code)
+        if name:
+            loss = Loss.search([('name', '=', name)], limit=1)
+            if loss:
+                return loss
+
+        # 3. Last resort: any availability loss
+        loss = Loss.search([('loss_type', '=', 'availability')], limit=1)
+        if not loss:
+            loss = Loss.search([], limit=1)
+        return loss
+
+    def _get_productive_loss(self):
+        """Get the 'Productive' loss record (loss_type='productive')."""
+        Loss = self.env['mrp.workcenter.productivity.loss'].sudo()
+        loss = Loss.search([('loss_type', '=', 'productive')], limit=1)
+        if not loss:
+            loss = Loss.search([], limit=1)
+        return loss
 
     def _do_oee_sync(self):
         """
-        Read sensor inputs from Modbus, compute OEE fresh from work order
-        data, and write computed OEE values back to HMI registers.
+        Full poll cycle: state machine + delta counter + MO list + OEE write.
 
-        OEE is computed directly here (not read from stored computed fields)
-        to avoid stale cached/stored values in background thread contexts.
+        1. Read M_STATUS, GOOD_COUNT, REJECT_COUNT, REASON_CODE, WO_ID from HMI
+        2. Detect M_STATUS transitions → create/close productivity records
+        3. Compute delta counter → update WO good/reject counts
+        4. Compute OEE from productivity records
+        5. Write MO list to register 40006–40025
+        6. Write OEE to register 40030–40033
         """
         self.ensure_one()
         wc = self.workcenter_id
@@ -290,32 +357,148 @@ class MrpModbusConfig(models.Model):
                 'last_connected': fields.Datetime.now(),
             })
 
-            # Step 1: Read sensor data from Modbus (for logging / future use)
+            # ---- Step 1: Read all input registers from HMI ----
             data = client.read_all_oee_inputs(self.register_map_ids)
-            _logger.info("Modbus sensor data for '%s': %s", self.name, data)
+            _logger.info("Modbus READ for '%s': %s", self.name, data)
 
-            # Step 2: Compute OEE fresh from work order / productivity data
-            # (stored computed fields can be stale in background threads)
+            m_status = int(data.get('m_status', 0) or 0)
+            good_count = int(data.get('good_count', 0) or 0)
+            reject_count = int(data.get('reject_count', 0) or 0)
+            reason_code = int(data.get('reason_code', 0) or 0)
+            wo_id = int(data.get('wo_id', 0) or 0)
+
+            # Update HMI display fields
+            self.write({
+                'hmi_m_status': m_status,
+                'hmi_good_count': good_count,
+                'hmi_reject_count': reject_count,
+                'hmi_wo_id': wo_id,
+            })
+
+            now = fields.Datetime.now()
+            last_status = self.last_m_status
+
+            # ---- Step 2: Find active WO (from wo_id sent by HMI) ----
+            active_wo = None
+            if wo_id:
+                active_wo = self.env['mrp.workorder'].sudo().search([
+                    ('production_id.id', '=', wo_id),
+                    ('workcenter_id', '=', wc.id),
+                ], limit=1)
+                if not active_wo:
+                    # Try matching production_id directly (mo ID as integer)
+                    mo = self.env['mrp.production'].sudo().browse(wo_id)
+                    if mo.exists():
+                        active_wo = self.env['mrp.workorder'].sudo().search([
+                            ('production_id', '=', mo.id),
+                            ('workcenter_id', '=', wc.id),
+                        ], limit=1)
+
+            # ---- Step 3: State machine — M_STATUS transitions ----
+            # Transitions drive both productivity records AND shopfloor WO card state
+            if last_status != -1 and last_status != m_status:
+                if last_status == 0 and m_status == 1:
+                    # STOP → RUNNING: Start or Resume WO → shopfloor card updates automatically
+                    _logger.info("[%s] M_STATUS 0→1 START/RESUME", self.name)
+                    if active_wo and active_wo.state not in ('done', 'cancel'):
+                        if active_wo.machine_state == 'paused':
+                            active_wo.sudo().action_machine_resume()
+                        else:
+                            active_wo.sudo().action_machine_start()
+                        self.write({'active_productivity_id': active_wo.current_productivity_id.id})
+                    else:
+                        # Fallback: no WO linked — workcenter-level productivity only
+                        self._close_active_productivity(now)
+                        prod = self._create_productivity(wc, wo_id, self._get_productive_loss(), now,
+                                                         'Production (Modbus)')
+                        self.write({'active_productivity_id': prod.id})
+
+                elif last_status == 1 and m_status == 0:
+                    # RUNNING → STOP: Block WO with reason → shopfloor card shows "Blocked"
+                    _logger.info("[%s] M_STATUS 1→0 STOP reason=%d", self.name, reason_code)
+                    loss = self._get_loss_for_reason(reason_code)
+                    if active_wo and active_wo.state not in ('done', 'cancel'):
+                        active_wo.sudo().action_machine_block(loss_id=loss.id)
+                        self.write({'active_productivity_id': active_wo.current_productivity_id.id})
+                    else:
+                        # Fallback: no WO linked
+                        self._close_active_productivity(now)
+                        reason_name = self.REASON_CODE_MAP.get(reason_code, 'Unknown')
+                        prod = self._create_productivity(wc, wo_id, loss, now,
+                                                         'Downtime (%s) (Modbus)' % reason_name)
+                        self.write({'active_productivity_id': prod.id})
+
+            elif last_status == -1:
+                # First poll — initialize state
+                if m_status == 1:
+                    _logger.info("[%s] First poll: machine running", self.name)
+                    if active_wo and active_wo.state not in ('done', 'cancel') \
+                            and active_wo.machine_state != 'running':
+                        active_wo.sudo().action_machine_start()
+                        self.write({'active_productivity_id': active_wo.current_productivity_id.id})
+                    elif not active_wo:
+                        prod = self._create_productivity(wc, wo_id, self._get_productive_loss(), now,
+                                                         'Production (Modbus init)')
+                        self.write({'active_productivity_id': prod.id})
+
+            # ---- Step 4: Delta counter ----
+            if active_wo and self.last_good_count >= 0 and self.last_reject_count >= 0:
+                delta_good = good_count - self.last_good_count
+                delta_reject = reject_count - self.last_reject_count
+
+                # Sanity: ignore negative deltas (counter reset)
+                if delta_good < 0:
+                    _logger.info("[%s] GOOD_COUNT counter reset detected (%d → %d)", self.name, self.last_good_count, good_count)
+                    delta_good = 0
+                if delta_reject < 0:
+                    _logger.info("[%s] REJECT_COUNT counter reset detected (%d → %d)", self.name, self.last_reject_count, reject_count)
+                    delta_reject = 0
+
+                if delta_good > 0:
+                    new_good = active_wo.good_count + delta_good
+                    active_wo.sudo().write({
+                        'good_count': new_good,
+                        'qty_produced': new_good,
+                    })
+                    _logger.info("[%s] WO %s good_count += %d → %d", self.name, active_wo.display_name, delta_good, new_good)
+
+                if delta_reject > 0:
+                    new_reject = active_wo.reject_count + delta_reject
+                    active_wo.sudo().write({'reject_count': new_reject})
+                    _logger.info("[%s] WO %s reject_count += %d → %d", self.name, active_wo.display_name, delta_reject, new_reject)
+
+            # Save last known counters
+            self.write({
+                'last_m_status': m_status,
+                'last_good_count': good_count,
+                'last_reject_count': reject_count,
+            })
+
+            # ---- Step 4: Compute OEE from productivity records ----
             availability_pct, performance_pct, quality_pct, oee_pct = \
                 self._compute_oee_fresh(wc)
 
             _logger.info(
-                "OEE computed for WC '%s': A=%.1f%% P=%.1f%% Q=%.1f%% OEE=%.1f%%",
+                "OEE for WC '%s': A=%.1f%% P=%.1f%% Q=%.1f%% OEE=%.1f%%",
                 wc.name, availability_pct, performance_pct, quality_pct, oee_pct,
             )
 
-            # Step 3: Write OEE values to HMI via Modbus
+            # ---- Step 5: Write MO list to register 40006–40025 ----
+            self._write_mo_list(client, wc)
+
+            # ---- Step 6: Close WO if HMI set FINISHED_STATUS = 1 ----
+            finished_status = int(data.get('finished_status', 0) or 0)
+            if finished_status == 1 and active_wo and active_wo.state not in ('done', 'cancel'):
+                _logger.info("[%s] FINISHED_STATUS=1 received → closing WO %s", self.name, active_wo.display_name)
+                active_wo.sudo().action_close_production()
+
+            # ---- Step 7: Write OEE to register 40030–40033 ----
             oee_results = {
                 'oee_availability': availability_pct,
                 'oee_performance':  performance_pct,
                 'oee_quality':      quality_pct,
                 'oee_overall':      oee_pct,
             }
-            write_regs = self.register_map_ids.filtered(lambda r: r.direction in ('write', 'read_write'))
-            _logger.info(
-                "Writing OEE to %d registers: %s",
-                len(write_regs), oee_results,
-            )
             client.write_all_oee_outputs(self.register_map_ids, oee_results)
 
         except Exception as e:
@@ -325,6 +508,71 @@ class MrpModbusConfig(models.Model):
         finally:
             if connected:
                 client.disconnect()
+
+    def _close_active_productivity(self, now):
+        """Close the currently active productivity record if it exists."""
+        if self.active_productivity_id and not self.active_productivity_id.date_end:
+            self.active_productivity_id.sudo().write({'date_end': now})
+            _logger.info("[%s] Closed productivity record #%d", self.name, self.active_productivity_id.id)
+
+    def _create_productivity(self, wc, wo_id, loss, now, description):
+        """Create a new mrp.workcenter.productivity record."""
+        Prod = self.env['mrp.workcenter.productivity'].sudo()
+        vals = {
+            'workcenter_id': wc.id,
+            'date_start': now,
+            'loss_id': loss.id if loss else False,
+            'description': description,
+        }
+        # Link to workorder if we can find one
+        if wo_id:
+            wo = self.env['mrp.workorder'].sudo().search([
+                ('production_id.id', '=', wo_id),
+                ('workcenter_id', '=', wc.id),
+            ], limit=1)
+            if wo:
+                vals['workorder_id'] = wo.id
+        prod = Prod.create(vals)
+        _logger.info("[%s] Created productivity #%d (%s)", self.name, prod.id, description)
+        return prod
+
+    def _write_mo_list(self, client, wc):
+        """Write active MO list + operator codes to register slots 40006–40025."""
+        # Find active MOs via workorders assigned to this work center
+        active_wos = self.env['mrp.workorder'].sudo().search([
+            ('workcenter_id', '=', wc.id),
+            ('state', 'not in', ['done', 'cancel']),
+        ], limit=10, order='id asc')
+        mos = active_wos.mapped('production_id')
+
+        # Build slot data
+        slot_data = {}
+        for i in range(10):
+            if i < len(mos):
+                mo = mos[i]
+                mo_id = mo.id
+                # Get operator code from responsible user
+                op_code = 0
+                if mo.user_id and hasattr(mo.user_id, 'operator_code') and mo.user_id.operator_code:
+                    try:
+                        op_code = int(mo.user_id.operator_code)
+                    except (ValueError, TypeError):
+                        op_code = 0
+                slot_data['mo_slot_%d_id' % i] = mo_id
+                slot_data['mo_slot_%d_op' % i] = op_code
+            else:
+                slot_data['mo_slot_%d_id' % i] = 0
+                slot_data['mo_slot_%d_op' % i] = 0
+
+        # Write via register map
+        for reg in self.register_map_ids:
+            if reg.variable_key in slot_data:
+                client.write_register(
+                    reg.register_address,
+                    slot_data[reg.variable_key],
+                    reg.data_type,
+                    reg.scale_factor,
+                )
 
     def _compute_oee_fresh(self, wc):
         """
